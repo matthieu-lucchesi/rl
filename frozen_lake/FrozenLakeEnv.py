@@ -5,11 +5,12 @@ env = gym.make('FrozenLake-v1', desc=None, map_name="4x4", is_slippery=False,
                )
 
 n_episode = 100
-agent = AgentQ(env, eps=0.8, T=1, lr= 0.1, gamma=0.9, n_episode=n_episode)
-decay = 1
-policy = "epsilon_greedy"
-def custom_step(env, action, observation):
+agent = AgentQ(env, eps=0.8, T=1, c=1, lr= 0.1, gamma=0.9, n_episode=n_episode)
+decay = 0.99
+policy = "ucb"
+def custom_step(env, agent, action, observation):
     obs, r, terminated, truncated, info = env.step(action)
+    agent.add_record(observation, action)
     if r == 0:
         if terminated:
             r = -1 #Lac
@@ -28,15 +29,15 @@ for _ in range(n_episode):
     while not episode_over:
         action = agent.get_action(observation)
         # 0: Move left --- 1: Move down --- 2: Move right --- 3: Move up
-        new_observation, reward, terminated, truncated, info = custom_step(env, action, observation)
+        new_observation, reward, terminated, truncated, info = custom_step(env, agent, action, observation)
        
         best_action = agent.get_action(new_observation, exploit_only=True)
         agent.update(observation, action, reward, new_observation, best_action)
         
         observation = new_observation
         episode_over = terminated or truncated
-        # if episode_over:
-        #     print(f"Terminated: {terminated} --- Truncated: {truncated} --- Eps: {agent.eps}")
-    agent.eps = agent.eps * decay
+    agent.eps = max(agent.eps * decay, 0.1)
+    agent.T = max(agent.T * decay, 0.1)
 env.close()
-agent.print_table()
+agent.print_table(agent.q)
+agent.print_table(agent.record)

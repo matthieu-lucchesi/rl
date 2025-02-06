@@ -6,10 +6,11 @@ import time
 
 
 class AgentQ:
-    def __init__(self, env, eps=0.8, T=1, lr=0.1, gamma=0.9, n_episode=100):
+    def __init__(self, env, eps=0.8, T=1.0, c=1.5, lr=0.1, gamma=0.9, n_episode=100):
         self.env = env
         self.eps = eps
         self.T = T
+        self.c = c
         self.learning_rate = lr
         self.gamma = gamma
         self.n_episode = n_episode
@@ -17,8 +18,7 @@ class AgentQ:
         self.q = np.zeros(
             (int(env.observation_space.n), int(env.action_space.n)), dtype=np.float64
         )
-
-
+        self.record = np.zeros_like(self.q)
     
     def get_action(self, obs, policy="epsilon_greedy", exploit_only=False):
         action = np.argmax(self.q[obs])
@@ -28,20 +28,25 @@ class AgentQ:
             action = self.env.action_space.sample()
         elif policy is "softmax":
             state_values = self.q[obs]
-            probabilities = softmax(state_values)
+            exp_values = np.exp(state_values / self.T)
+            probabilities = exp_values / np.sum(exp_values)
             action = np.random.choice(len(state_values), p=probabilities)
-
+        elif policy is "ucb":
+            state_values = self.q[obs]
+            state_visits = np.sum(self.record[obs]) + 1
+            ucb_values = state_values + self.c * np.sqrt(np.log(state_visits) / (self.record[obs] + 1))
+            action = np.argmax(ucb_values)
         return action
 
     def update(self, state, action, reward, new_state, new_action):
-        print(f"{state=} {action=} {reward=} {new_state=} {new_action=}")
-        print(self.q[state, action])
         self.q[state, action] = self.q[state, action] + self.learning_rate * (
             reward + self.gamma * self.q[new_state, new_action] - self.q[state, action]
         )
-        print(self.q[state, action])
 
-    def print_table(self):
+    def add_record(self, state, action):
+        self.record[state, action] += 1
+
+    def print_table(self, table):
 
         grid_size = int(np.sqrt(self.env.observation_space.n))
         fig, ax = plt.subplots(figsize=(6, 6))
@@ -54,7 +59,7 @@ class AgentQ:
         # Ajouter les valeurs au centre de chaque côté
         for i in range(grid_size):
             for j in range(grid_size):
-                left, bottom, right, top = self.q[i * grid_size + j]
+                left, bottom, right, top = table[i * grid_size + j]
 
                 # Center cell (i, j)
                 x, y = j + 0.5, grid_size - i - 0.5  # Top and bottom reversed
@@ -126,6 +131,3 @@ class AgentQ:
         # plt.pause(0.75)
         # plt.close()
     
-def softmax(values, t):
-    exp_values = np.exp(values / t)
-    return exp_values / np.sum(exp_values)
