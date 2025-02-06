@@ -11,7 +11,6 @@ env = gym.make(
     enable_wind=False,
 )
 observation, info = env.reset(seed=42)
-
 episode_over = False
 while not episode_over:
     action = env.action_space.sample()
