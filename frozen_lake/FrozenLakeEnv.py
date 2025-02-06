@@ -6,8 +6,9 @@ env = gym.make('FrozenLake-v1', desc=None, map_name="4x4", is_slippery=False,
 
 n_episode = 100
 agent = AgentQ(env, eps=0.8, T=1, c=1, lr= 0.1, gamma=0.9, n_episode=n_episode)
-decay = 0.99
-policy = "ucb"
+decay = 1
+policy = "epsilon_greedy"
+
 def custom_step(env, agent, action, observation):
     obs, r, terminated, truncated, info = env.step(action)
     agent.add_record(observation, action)
@@ -27,7 +28,7 @@ for _ in range(n_episode):
     # Observation: id of where agent is.
     episode_over = False
     while not episode_over:
-        action = agent.get_action(observation)
+        action = agent.get_action(observation, policy)
         # 0: Move left --- 1: Move down --- 2: Move right --- 3: Move up
         new_observation, reward, terminated, truncated, info = custom_step(env, agent, action, observation)
        
