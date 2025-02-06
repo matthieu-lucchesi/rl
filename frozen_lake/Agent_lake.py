@@ -2,12 +2,14 @@ import random
 from matplotlib import cm
 import numpy as np
 import matplotlib.pyplot as plt
+import time
 
 
 class AgentQ:
-    def __init__(self, env, eps, lr, gamma, n_episode):
+    def __init__(self, env, eps=0.8, T=1, lr=0.1, gamma=0.9, n_episode=100):
         self.env = env
         self.eps = eps
+        self.T = T
         self.learning_rate = lr
         self.gamma = gamma
         self.n_episode = n_episode
@@ -16,20 +18,28 @@ class AgentQ:
             (int(env.observation_space.n), int(env.action_space.n)), dtype=np.float64
         )
 
-    def get_action(self, obs, exploit_only=False):
+
+    
+    def get_action(self, obs, policy="epsilon_greedy", exploit_only=False):
         action = np.argmax(self.q[obs])
-        if not exploit_only and random.random() < self.eps:  # Explore
+        if exploit_only:
+            return action
+        if policy is "epsilon_greedy" and random.random() < self.eps:  # Explore
             action = self.env.action_space.sample()
+        elif policy is "softmax":
+            state_values = self.q[obs]
+            probabilities = softmax(state_values)
+            action = np.random.choice(len(state_values), p=probabilities)
+
         return action
 
     def update(self, state, action, reward, new_state, new_action):
+        print(f"{state=} {action=} {reward=} {new_state=} {new_action=}")
+        print(self.q[state, action])
         self.q[state, action] = self.q[state, action] + self.learning_rate * (
             reward + self.gamma * self.q[new_state, new_action] - self.q[state, action]
         )
-
-    # def epsilon_decay(self):
-    #     self.eps = self.eps - (2 * self.eps - 1) / (2 * self.n_episode)
-    #     return self.eps
+        print(self.q[state, action])
 
     def print_table(self):
 
@@ -61,7 +71,7 @@ class AgentQ:
                 ax.text(
                     x - 0.3,
                     y,
-                    f"{left:0.3f}",
+                    f"{left:0.5f}",
                     ha="center",
                     va="center",
                     fontsize=fontsize,
@@ -71,7 +81,7 @@ class AgentQ:
                 ax.text(
                     x,
                     y - 0.3,
-                    f"{bottom:0.3f}",
+                    f"{bottom:0.5f}",
                     ha="center",
                     va="center",
                     fontsize=fontsize,
@@ -81,7 +91,7 @@ class AgentQ:
                 ax.text(
                     x + 0.3,
                     y,
-                    f"{right:0.3f}",
+                    f"{right:0.5f}",
                     ha="center",
                     va="center",
                     fontsize=fontsize,
@@ -91,7 +101,7 @@ class AgentQ:
                 ax.text(
                     x,
                     y + 0.3,
-                    f"{top:0.3f}",
+                    f"{top:0.5f}",
                     ha="center",
                     va="center",
                     fontsize=fontsize,
@@ -106,4 +116,16 @@ class AgentQ:
         ax.set_ylim(0, grid_size)
 
         plt.title("Q table")
-        plt.show()
+        manager = plt.get_current_fig_manager()
+        try:
+            manager.window.move(100, 100)  # Position (x=100, y=100)
+        except AttributeError:
+            pass  # Ignore si move() ne fonctionne pas
+
+        plt.show(block=True)
+        # plt.pause(0.75)
+        # plt.close()
+    
+def softmax(values, t):
+    exp_values = np.exp(values / t)
+    return exp_values / np.sum(exp_values)
