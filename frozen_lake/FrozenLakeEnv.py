@@ -6,7 +6,9 @@ env = gym.make('FrozenLake-v1', desc=None, map_name="4x4", is_slippery=False,
 
 n_episode = 100
 agent = AgentQ(env, eps=0.8, T=1, c=1, lr= 0.1, gamma=0.9, n_episode=n_episode)
-decay = 1
+decay = .95
+policy = "softmax"
+policy = "ucb"
 policy = "epsilon_greedy"
 
 def custom_step(env, agent, action, observation):
