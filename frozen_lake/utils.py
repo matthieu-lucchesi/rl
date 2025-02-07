@@ -101,7 +101,7 @@ def plots(episodes, title, save=False):
         {1: "green", 0: "red"}
     )  # Green if success, red otherwise
     success_rate = episodes["Success"].mean() * 100
-    label = f"Episode Length: {0}\nSuccess Rate: {success_rate:.1f}%"
+    label = f"Episode Length: {episodes['Length'].mean()}\nSuccess Rate: {success_rate:.1f}%"
     axes[1, 0].bar(episodes["Episode"], episodes["Length"], color=colors, label=label)
     axes[1, 0].set_ylabel("Length")
     axes[1, 0].set_title("Episode Length (Green = Success, Red = Failure)")
@@ -125,20 +125,54 @@ def plots(episodes, title, save=False):
 
     # Show the plots
     plt.tight_layout(rect=[0, 0, 1, 0.97])
-    title = os.path.join(os.path.join("frozen_lake", "results"), title)
+    title_ = os.path.join(os.path.join("frozen_lake", "results"), title)
 
     if save:
-        plt.savefig(title + ".png")
+        plt.savefig(title_ + ".png")
     else:
         plt.show()
     plt.close()
+    # return agent, score_mean, length_mean, success_rate, score-length_mean, first episode with positive cumulative mean
+    score_length = episodes["Score"] / episodes["Length"]
+    return (
+        title,
+        episodes["Score"].mean(),
+        episodes["Length"].mean(),
+        success_rate,
+        score_length.mean(),
+        crossing_episode,
+    )
 
-def save_results(results):
-    def round_df(df, decimals=5):
-        return df.map(lambda x: round(x, decimals) if isinstance(x, (int, float)) else x)
-    dfs_json = [round_df(df).to_dict(orient="records") for df in results]
-    
-    title = os.path.join(os.path.join("frozen_lake", "results"), "results.json")
-    with open(title, "w") as f:
+
+def save_results(score_agents, allrecord_results):
+    df = pd.DataFrame(
+        score_agents,
+        columns=[
+            "Agent",
+            "Score",
+            "Length",
+            "Success",
+            "Score/Length",
+            "Cumulative mean above 0",
+        ],
+    )
+
+    df = df.fillna(-1).round(5).to_dict(orient="records")
+    df_json = sorted(
+        df,
+        key=lambda x: (
+            x["Cumulative mean above 0"] == -1,
+            x["Cumulative mean above 0"],
+        ),  # The faster the mean goes above 0 the better the agent is
+    )
+    title1 = os.path.join(os.path.join("frozen_lake", "results"), "agents_results.json")
+    with open(title1, "w") as f:
+        json.dump(df_json, f, indent=4)
+
+    dfs_json = [df.to_dict(orient="records") for df in allrecord_results]
+    title2 = os.path.join(
+        os.path.join("frozen_lake", "results"), "all-record_results.json"
+    )
+    with open(title2, "w") as f:
         json.dump(dfs_json, f, indent=4)
-    return title
+    return title1, title2

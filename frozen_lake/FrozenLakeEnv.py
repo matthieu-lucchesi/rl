@@ -19,6 +19,7 @@ with open("test.json", "r") as file:
     agents_test = json.load(file)
 
 score_agents = []
+allrecord_results = []
 print(f"Training of {len(agents_test)} agents.")
 for agent_test in tqdm(agents_test):
     agent = AgentQ(env=env, **agent_test)
@@ -39,11 +40,11 @@ for agent_test in tqdm(agents_test):
             observation = new_observation
             episode_over = terminated or truncated
         agent.end_episode()
-    score_agent = score(agent.episodes)
-    plots(score_agent, agent_test["Title"], save=True)
-    score_agent["Agent"] = agent_test["Title"]
-    score_agents.append(score_agent)
+    allrecord_result = score(agent.episodes)
+    allrecord_result["Agent"] = agent_test["Title"]
+    allrecord_results.append(allrecord_result)
+    score_agents.append(plots(allrecord_result.copy(), agent_test["Title"], save=True))
 
 env.close()
 print("Plots saved in frozen_lake/results/")
-print(f"Results saved at {save_results(score_agents)}")
+print(f"Results saved at {save_results(score_agents, allrecord_results)}")

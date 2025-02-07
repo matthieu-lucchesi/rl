@@ -1,0 +1,4 @@
+[
+    {"policy": "ucb", "c": 0.5},
+    {"policy": "egreedy", "eps": 0.6, "d": 0.9}
+]

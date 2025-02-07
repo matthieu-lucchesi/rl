@@ -11,6 +11,7 @@ class AgentQ:
         eps=0.8,
         T=1.0,
         c=1.5,
+        noise=False,
         d=1.0,  # Not decaying through episodes
         lr=0.1,
         gamma=0.9,
@@ -22,6 +23,7 @@ class AgentQ:
         self.eps = eps
         self.T = T
         self.c = c
+        self.noise = noise
         self.d = d
         self.learning_rate = lr
         self.gamma = gamma
@@ -53,6 +55,9 @@ class AgentQ:
             ucb_values = state_values + self.c * np.sqrt(
                 np.log(state_visits) / (self.record[obs] + 1)
             )
+            if self.noise:
+                ucb_values += np.random.normal(0, 0.01, size=ucb_values.shape)  # Gaussian noise
+
             action = np.argmax(ucb_values)
         return action
 

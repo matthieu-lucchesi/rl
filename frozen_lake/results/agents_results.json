@@ -1,0 +1,386 @@
+[
+    {
+        "Agent": "policy-egreedy_eps-0.8_d-0.9",
+        "Score": 0.838,
+        "Length": 6.77,
+        "Success": 93.0,
+        "Score/Length": 0.1304,
+        "Cumulative mean above 0": 16.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-0.6_d-0.95",
+        "Score": 0.552,
+        "Length": 6.81,
+        "Success": 79.0,
+        "Score/Length": 0.06879,
+        "Cumulative mean above 0": 39.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-0.1_d-1",
+        "Score": 0.514,
+        "Length": 9.34,
+        "Success": 77.0,
+        "Score/Length": 0.0729,
+        "Cumulative mean above 0": 40.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-1_d-0.95",
+        "Score": 0.512,
+        "Length": 7.16,
+        "Success": 78.0,
+        "Score/Length": 0.0775,
+        "Cumulative mean above 0": 49.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-1_d-0.9",
+        "Score": 0.506,
+        "Length": 7.54,
+        "Success": 77.0,
+        "Score/Length": 0.08518,
+        "Cumulative mean above 0": 50.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-0.05_d-1",
+        "Score": 0.468,
+        "Length": 19.87,
+        "Success": 72.0,
+        "Score/Length": 0.09175,
+        "Cumulative mean above 0": 53.0
+    },
+    {
+        "Agent": "policy-ucb_c-0.5_noise-0",
+        "Score": 0.401,
+        "Length": 9.46,
+        "Success": 76.0,
+        "Score/Length": 0.06125,
+        "Cumulative mean above 0": 60.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-0.2_d-1",
+        "Score": 0.145,
+        "Length": 7.92,
+        "Success": 60.0,
+        "Score/Length": -4e-05,
+        "Cumulative mean above 0": 69.0
+    },
+    {
+        "Agent": "policy-ucb_c-0.5_noise-1",
+        "Score": 0.299,
+        "Length": 10.15,
+        "Success": 72.0,
+        "Score/Length": 0.04877,
+        "Cumulative mean above 0": 71.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-0.9_d-0.95",
+        "Score": 0.298,
+        "Length": 7.9,
+        "Success": 67.0,
+        "Score/Length": 0.04227,
+        "Cumulative mean above 0": 71.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-0.8_d-0.95",
+        "Score": 0.294,
+        "Length": 9.15,
+        "Success": 67.0,
+        "Score/Length": 0.04706,
+        "Cumulative mean above 0": 71.0
+    },
+    {
+        "Agent": "policy-softmax_T-1_d-0.8",
+        "Score": 0.269,
+        "Length": 10.71,
+        "Success": 72.0,
+        "Score/Length": 0.02691,
+        "Cumulative mean above 0": 73.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-0.9_d-0.9",
+        "Score": 0.256,
+        "Length": 14.66,
+        "Success": 62.0,
+        "Score/Length": 0.03922,
+        "Cumulative mean above 0": 75.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-0.95_d-0.95",
+        "Score": 0.227,
+        "Length": 8.07,
+        "Success": 64.0,
+        "Score/Length": 0.03531,
+        "Cumulative mean above 0": 78.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-0.7_d-0.95",
+        "Score": 0.192,
+        "Length": 10.46,
+        "Success": 62.0,
+        "Score/Length": 0.04301,
+        "Cumulative mean above 0": 81.0
+    },
+    {
+        "Agent": "policy-softmax_T-0.5_d-0.9",
+        "Score": 0.181,
+        "Length": 13.23,
+        "Success": 71.0,
+        "Score/Length": 0.02092,
+        "Cumulative mean above 0": 82.0
+    },
+    {
+        "Agent": "policy-softmax_T-3_d-0.9",
+        "Score": 0.148,
+        "Length": 11.48,
+        "Success": 68.0,
+        "Score/Length": 0.02149,
+        "Cumulative mean above 0": 83.0
+    },
+    {
+        "Agent": "policy-softmax_T-1_d-0.9",
+        "Score": 0.161,
+        "Length": 12.39,
+        "Success": 70.0,
+        "Score/Length": 0.0346,
+        "Cumulative mean above 0": 84.0
+    },
+    {
+        "Agent": "policy-softmax_T-2_d-0.9",
+        "Score": 0.128,
+        "Length": 12.13,
+        "Success": 68.0,
+        "Score/Length": 0.00749,
+        "Cumulative mean above 0": 87.0
+    },
+    {
+        "Agent": "policy-softmax_T-0.5_d-0.8",
+        "Score": 0.108,
+        "Length": 11.91,
+        "Success": 66.0,
+        "Score/Length": 0.02847,
+        "Cumulative mean above 0": 89.0
+    },
+    {
+        "Agent": "policy-softmax_T-3_d-0.8",
+        "Score": 0.107,
+        "Length": 14.19,
+        "Success": 67.0,
+        "Score/Length": 0.02335,
+        "Cumulative mean above 0": 90.0
+    },
+    {
+        "Agent": "policy-softmax_T-2_d-0.8",
+        "Score": 0.074,
+        "Length": 12.96,
+        "Success": 65.0,
+        "Score/Length": 0.01613,
+        "Cumulative mean above 0": 93.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-0.7_d-0.9",
+        "Score": 0.071,
+        "Length": 33.49,
+        "Success": 44.0,
+        "Score/Length": 0.02962,
+        "Cumulative mean above 0": 93.0
+    },
+    {
+        "Agent": "policy-ucb_c-1_noise-1",
+        "Score": -0.061,
+        "Length": 11.28,
+        "Success": 58.0,
+        "Score/Length": -0.00302,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-ucb_c-1.5_noise-1",
+        "Score": -0.427,
+        "Length": 12.26,
+        "Success": 43.0,
+        "Score/Length": -0.05363,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-ucb_c-5.0_noise-1",
+        "Score": -1.273,
+        "Length": 11.03,
+        "Success": 4.0,
+        "Score/Length": -0.1753,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-ucb_c-1_noise-0",
+        "Score": -0.046,
+        "Length": 10.93,
+        "Success": 58.0,
+        "Score/Length": 0.00857,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-ucb_c-1.5_noise-0",
+        "Score": -0.372,
+        "Length": 11.97,
+        "Success": 45.0,
+        "Score/Length": -0.05317,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-ucb_c-5.0_noise-0",
+        "Score": -1.275,
+        "Length": 11.05,
+        "Success": 4.0,
+        "Score/Length": -0.17246,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-softmax_T-0.5_d-1",
+        "Score": -1.281,
+        "Length": 12.05,
+        "Success": 6.0,
+        "Score/Length": -0.15792,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-softmax_T-0.5_d-0.99",
+        "Score": -0.767,
+        "Length": 13.19,
+        "Success": 29.0,
+        "Score/Length": -0.09749,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-softmax_T-1_d-1",
+        "Score": -1.193,
+        "Length": 9.08,
+        "Success": 5.0,
+        "Score/Length": -0.18808,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-softmax_T-1_d-0.99",
+        "Score": -1.334,
+        "Length": 13.54,
+        "Success": 4.0,
+        "Score/Length": -0.17834,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-softmax_T-2_d-1",
+        "Score": -1.224,
+        "Length": 8.18,
+        "Success": 2.0,
+        "Score/Length": -0.23006,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-softmax_T-2_d-0.99",
+        "Score": -1.32,
+        "Length": 9.06,
+        "Success": 1.0,
+        "Score/Length": -0.21166,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-softmax_T-3_d-1",
+        "Score": -1.253,
+        "Length": 8.9,
+        "Success": 2.0,
+        "Score/Length": -0.2191,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-softmax_T-3_d-0.99",
+        "Score": -1.247,
+        "Length": 10.2,
+        "Success": 5.0,
+        "Score/Length": -0.1923,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-0.3_d-1",
+        "Score": -0.103,
+        "Length": 8.43,
+        "Success": 48.0,
+        "Score/Length": -0.04611,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-0.4_d-1",
+        "Score": -0.165,
+        "Length": 7.72,
+        "Success": 46.0,
+        "Score/Length": -0.08724,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-0.5_d-1",
+        "Score": -0.652,
+        "Length": 8.02,
+        "Success": 23.0,
+        "Score/Length": -0.16588,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-1_d-1",
+        "Score": -1.277,
+        "Length": 7.35,
+        "Success": 0.0,
+        "Score/Length": -0.24057,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-0.95_d-1",
+        "Score": -1.225,
+        "Length": 7.7,
+        "Success": 1.0,
+        "Score/Length": -0.22693,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-0.95_d-0.9",
+        "Score": -0.494,
+        "Length": 66.42,
+        "Success": 0.0,
+        "Score/Length": -0.03878,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-0.9_d-1",
+        "Score": -1.122,
+        "Length": 7.35,
+        "Success": 5.0,
+        "Score/Length": -0.22389,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-0.8_d-1",
+        "Score": -0.998,
+        "Length": 7.45,
+        "Success": 9.0,
+        "Score/Length": -0.21524,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-0.7_d-1",
+        "Score": -0.907,
+        "Length": 7.27,
+        "Success": 13.0,
+        "Score/Length": -0.22099,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-0.6_d-1",
+        "Score": -0.649,
+        "Length": 6.98,
+        "Success": 23.0,
+        "Score/Length": -0.17821,
+        "Cumulative mean above 0": -1.0
+    },
+    {
+        "Agent": "policy-egreedy_eps-0.6_d-0.9",
+        "Score": -0.474,
+        "Length": 73.1,
+        "Success": 0.0,
+        "Score/Length": -0.03617,
+        "Cumulative mean above 0": -1.0
+    }
+]
