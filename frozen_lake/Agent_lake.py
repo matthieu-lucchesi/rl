@@ -2,39 +2,57 @@ import random
 from matplotlib import cm
 import numpy as np
 import matplotlib.pyplot as plt
-import time
 
 
 class AgentQ:
-    def __init__(self, env, eps=0.8, T=1.0, c=1.5, lr=0.1, gamma=0.9, n_episode=100):
+    def __init__(
+        self,
+        env,
+        eps=0.8,
+        T=1.0,
+        c=1.5,
+        d=1.0,  # Not decaying through episodes
+        lr=0.1,
+        gamma=0.9,
+        n_episode=100,
+        max_length=100,
+        policy = "egreedy",
+    ):
         self.env = env
         self.eps = eps
         self.T = T
         self.c = c
+        self.d = d
         self.learning_rate = lr
         self.gamma = gamma
         self.n_episode = n_episode
+        self.max_length = max_length
+        self.policy = policy
 
         self.q = np.zeros(
             (int(env.observation_space.n), int(env.action_space.n)), dtype=np.float64
         )
         self.record = np.zeros_like(self.q)
-    
-    def get_action(self, obs, policy="epsilon_greedy", exploit_only=False):
+        self.episode = []
+        self.episodes = []
+
+    def get_action(self, obs, exploit_only=False):
         action = np.argmax(self.q[obs])
         if exploit_only:
             return action
-        if policy is "epsilon_greedy" and random.random() < self.eps:  # Explore
+        if self.policy == "egreedy" and random.random() < self.eps:  # Explore
             action = self.env.action_space.sample()
-        elif policy is "softmax":
+        elif self.policy == "softmax":
             state_values = self.q[obs]
             exp_values = np.exp(state_values / self.T)
             probabilities = exp_values / np.sum(exp_values)
             action = np.random.choice(len(state_values), p=probabilities)
-        elif policy is "ucb":
+        elif self.policy == "ucb":
             state_values = self.q[obs]
             state_visits = np.sum(self.record[obs]) + 1
-            ucb_values = state_values + self.c * np.sqrt(np.log(state_visits) / (self.record[obs] + 1))
+            ucb_values = state_values + self.c * np.sqrt(
+                np.log(state_visits) / (self.record[obs] + 1)
+            )
             action = np.argmax(ucb_values)
         return action
 
@@ -46,6 +64,15 @@ class AgentQ:
     def add_record(self, state, action):
         self.record[state, action] += 1
 
+    def new_episode(self, env):
+        return env.reset(seed=42), False
+    def end_episode(self):    
+        self.episodes.append(self.episode)
+        self.episode = []
+
+        self.eps = max(self.eps * self.d, 0.01)
+        self.T = max(self.T * self.d, 0.1)
+    
     def print_table(self, table):
 
         grid_size = int(np.sqrt(self.env.observation_space.n))
@@ -130,4 +157,3 @@ class AgentQ:
         plt.show(block=True)
         # plt.pause(0.75)
         # plt.close()
-    

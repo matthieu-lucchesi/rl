@@ -16,7 +16,7 @@ while not episode_over:
     action = env.action_space.sample()
     # action = 2 if i % 3 == 0 else 0  # agent policy that uses the observation and info
     observation, reward, terminated, truncated, info = env.step(action)
-    # Observation[8]: [coordinates x, y, linear velocities x, y, 
+    # Observation[8]: [coordinates x, y, linear velocities x, y,
     # angle, angular velocity, 2 booleans leg in contact with ground]
     episode_over = terminated or truncated
 
