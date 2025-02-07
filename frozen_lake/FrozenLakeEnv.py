@@ -43,7 +43,7 @@ for agent_test in tqdm(agents_test):
     plots(score_agent, agent_test["Title"], save=True)
     score_agent["Agent"] = agent_test["Title"]
     score_agents.append(score_agent)
-    
+
 env.close()
-print("plots saved in frozen_lake/results/")
+print("Plots saved in frozen_lake/results/")
 print(f"Results saved at {save_results(score_agents)}")
