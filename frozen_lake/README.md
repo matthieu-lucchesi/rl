@@ -28,3 +28,12 @@ $$
 Q'(s, a) = Q(s, a) + c \sqrt{\frac{\log(N(s))}{N(s, a) + 1}}.
 $$
 
+## Results
+
+We run the tests using a *json* file. Results are available in *results/*. We can see plots for each agent and two json files:
+* The record of all episodes of every agent.
+* The score of the agents we wanted to test, ordered by the first episode to reach a positive cumulative mean. We can also observe the mean of the ration episode reward / episode length.
+
+## What comes next
+
+Check repeatability of an agent.
