@@ -1,19 +1,23 @@
 import time
 
-from utils import click_img, get_position_from_img
+from utils import click_img, start_game
+from Grid import Grid
 
 
-click_img("opera")
+player = start_game()
 
-print(f"selected_X at : {get_position_from_img("selected_X", confidence=0.999)}")
-print(f"selected_O at : {get_position_from_img("selected_O", confidence=0.999)}")
-print(f"unselected_X at : {get_position_from_img("unselected_X", confidence=.99)}")
-print(f"unselected_O at : {get_position_from_img("unselected_O", confidence=.99)}")
-
+print(player)
+grid = Grid()
+print(grid)
+print(f"Player {grid.get_turn()} to play")
+grid = grid.detect_gird()
+print(grid)
 
 click_img("opera", confidence=.5)
- 
 # grid = detect_grid()
 
 
 # pyautogui.hotkey("alt", "tab")
+
+
+
