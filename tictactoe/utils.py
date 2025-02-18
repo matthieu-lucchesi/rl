@@ -1,11 +1,11 @@
 import numpy as np
 import pyautogui 
 import time
-import os
 import pyautogui
-import subprocess
 import random
-
+import torch
+from tqdm import tqdm
+import copy
 
 def get_path(wsl_path):
     wsl_path = "./tictactoe/images/" + wsl_path + ".png"
@@ -182,3 +182,83 @@ def check_winner_after_cpu():
         print("result_O")
         res = True, 2
     return res
+
+
+def train_agent(env, agent, player_input=-1, episodes=1000):
+    results = []
+    players = []
+    times = []
+    for ep in range(1, episodes + 1):
+        start_time = time.time()
+        state, terminated = env.reset()
+        agent_state = None
+        rewards = []
+        player = player_input
+        if player_input == -1:
+            player = random.choice([1,2])
+        players.append(player)
+        opponent = player % 2 + 1
+        # print("Agent is player: ", player)
+        while not terminated:
+            if env.get_turn() == player:  # Agent to play
+                # print("Agent")
+                agent_state = state.copy()
+                action = agent.get_action(state)
+                next_state, reward, terminated = env.step(player, action)
+                agent_next_state = next_state.copy()
+                if terminated: 
+                    agent.store_exp(agent_state, action, reward, next_state, terminated)  # Store exp Agent ending the game
+                state = next_state
+
+            else:  # Opponent to play
+                opponent_action = random.choice([i for i in range(len(env.grid)) if env.grid[i] == 0])
+                opponent_next_state, opponent_reward, opponent_terminated = env.step(opponent, opponent_action)
+                reward = -opponent_reward  # Negative reward when agent is loosing
+                if agent_state is not None:
+                    agent.store_exp(agent_state, action, reward, agent_next_state, terminated)  # Store exp after opponent played to check reward
+                state = opponent_next_state
+                terminated = opponent_terminated
+            
+            rewards.append(reward)
+            # print(env)
+        times.append(round(time.time() - start_time, 2))
+        results.append(reward)
+        if ep % agent.update_rate == 0:  # Train every update_rate episodes
+            agent.train()   
+            agent.update_eps()
+            # print(f"After ep {ep}: rewards of {sum(results) / len(results) * 100}%")
+    return players, results, agent, times
+
+
+def play_website(env, games = 3):
+    agent_wins = []
+    player_log = []
+    grid = env
+    player = grid.init_game(player=None, first_init=True)
+    for game_id in range(games):
+        ending = False
+        player_log.append(player)
+        time.sleep(.5)
+        grid.update_grid()
+        print(grid)
+        while not ending:
+            ending, winner = grid.play(player, index=-1)  # Agent learning this index !
+            print("played:")
+            print(grid, "\n")
+            if ending or winner:
+                break
+            time.sleep(1)
+            print("cpu played:")
+            ending, winner = grid.update_grid()
+            print(grid, "\n")
+        print("WINNER ", winner)
+        agent_wins.append(0 if winner == 0 else 1 if winner == player else -1)
+        time.sleep(1)
+        if game_id != games - 1:
+            player = grid.reset()
+        else:
+            click_img("reset_game")
+
+    click_img("opera", confidence=.5)
+    print(player_log)
+    print(agent_wins)

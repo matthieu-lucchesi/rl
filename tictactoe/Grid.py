@@ -1,8 +1,6 @@
 import random
-import cv2
 import numpy as np
-import pyautogui
-from utils import check_winner_after_cpu, click_img, click_pos, detect_cells, extract_cells, get_path, start_game
+from utils import click_img, click_pos, detect_cells, extract_cells, start_game
 
 class Grid:
     def __init__(self):

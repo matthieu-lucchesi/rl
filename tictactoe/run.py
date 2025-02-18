@@ -1,54 +1,44 @@
-import time
-import random
+import utils
+from TicTacToeEnv import TictactoeEnv
+from Agent import Agent
+import torch
 
-import numpy as np
-from utils import click_img, start_game, check_winner_after_cpu
-from Grid import Grid
-import pyautogui
+import torch
+from time import time
 
-# click_img("opera", confidence=.5)
-# click_img("reset_game")
-# # print(check_winner_cpu())
-
-
-# print(1/0)
-agent_wins = []
-player_log = []
-
-grid = Grid()
-player = grid.init_game(player=None, first_init=True)
-
-games = 3
-for game_id in range(games):
-    ending = False
-    player_log.append(player)
-    time.sleep(.5)
-    grid.update_grid()
-    print(grid)
-    while not ending:
-        ending, winner = grid.play(player, index=-1)  # Agent learning this index !
-        print("played:")
-        # time.sleep(.2)
-        # grid.update_grid()
-        print(grid, "\n")
-        if ending or winner:
-            break
-        print("cpu played:")
-        time.sleep(1)
-        ending, winner = grid.update_grid()
-        print(grid, "\n")
-    print("WINNER ", winner)
-    agent_wins.append(0 if winner == 0 else 1 if winner == player else -1)
-    time.sleep(1)
-    if game_id != games - 1:
-        player = grid.reset()
-    else:
-        click_img("reset_game")
-
-click_img("opera", confidence=.5)
-print(player_log)
-print(agent_wins)
-# pyautogui.hotkey("alt", "tab")
+start = time()
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+device = "cpu"
+print(f"Using device: {device}")
+batch_size = 128
+update_rate = 50
 
 
+env = TictactoeEnv()
+agent = Agent(device=device, batch_size=batch_size, update_rate=update_rate)
+episodes = 100
+players, results, agent, times = utils.train_agent(env, agent, player_input=-1, episodes=episodes)
+print(sum([1 for player in players if player == 1 ]) / episodes *100, "% of the time playing X")
+print(sum(results) / len(results) * 100, "% of the time winning")
+# print(times)
+agent.save(str(episodes))
 
+env = TictactoeEnv()
+agent = Agent(device=device, batch_size=batch_size, update_rate=update_rate)
+episodes = 1000
+players, results, agent, times = utils.train_agent(env, agent, player_input=-1, episodes=episodes)
+print(sum([1 for player in players if player == 1 ]) / episodes *100, "% of the time playing X")
+print(sum(results) / len(results) * 100, "% of the time winning")
+# print(times)
+agent.save(str(episodes))
+
+env = TictactoeEnv()
+agent = Agent(device=device, batch_size=batch_size, update_rate=update_rate)
+episodes = 3000
+players, results, agent, times = utils.train_agent(env, agent, player_input=-1, episodes=episodes)
+print(sum([1 for player in players if player == 1 ]) / episodes *100, "% of the time playing X")
+print(sum(results) / len(results) * 100, "% of the time winning")
+# print(times)
+agent.save(str(episodes))
+
+print(f"Used {time()- start}s")
