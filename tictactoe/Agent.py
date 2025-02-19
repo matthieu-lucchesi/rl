@@ -20,7 +20,7 @@ class Brain(nn.Module):
 
 
 class Agent:
-    def __init__(self, eps=1.0, eps_min=0.01, eps_decay=0.9, gamma=0.9, lr=0.001, batch_size=64, memory_size=512, update_rate=50, device="cpu"):
+    def __init__(self, eps=1.0, eps_min=0.01, eps_decay=0.9, gamma=0.9, lr=0.001, batch_size=64, memory_size=256, update_rate=50, device="cpu"):
         # self.player = player  # 1 or 2; X or O
         self.eps = eps
         self.eps_decay = eps_decay
@@ -45,9 +45,9 @@ class Agent:
         else:
             state_tensor = torch.tensor(state, dtype=torch.float32, device=self.device).unsqueeze(0)
             q_values = self.model(state_tensor)
-            mask = torch.tensor([ele == 0 for ele in state], device=self.device)
-            q_values = q_values * mask  # bad if cell already taken 
-            print(q_values)
+            mask = torch.tensor([float("-inf") if s != 0 else 0 for s in state], device=self.device)
+            q_values = q_values + mask  # bad if cell already taken 
+            # print(q_values)
             return torch.argmax(q_values).item()
 
     def update_eps(self):

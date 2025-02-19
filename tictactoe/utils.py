@@ -7,6 +7,8 @@ import torch
 from tqdm import tqdm
 import copy
 
+from Agent import Agent
+
 def get_path(wsl_path):
     wsl_path = "./tictactoe/images/" + wsl_path + ".png"
     return wsl_path
@@ -202,7 +204,6 @@ def train_agent(env, agent, ennemy=None, player_input=-1, episodes=1000):
         # print("Agent is player: ", player)
         while not terminated:
             if env.get_turn() == player:  # Agent to play
-                # print("Agent")
                 agent_state = state.copy()
                 # print(state)
                 action = agent.get_action(state)
@@ -216,7 +217,6 @@ def train_agent(env, agent, ennemy=None, player_input=-1, episodes=1000):
             else:  # Opponent to play
                 opponent_action = random.choice([i for i in range(len(env.grid)) if env.grid[i] == 0])
                 if ennemy is not None:
-                    # print("Ennemy is smart")
                     opponent_action = ennemy.get_action(state)
                 opponent_next_state, opponent_reward, opponent_terminated = env.step(opponent, opponent_action)
                 reward = -opponent_reward  # Negative reward when agent is loosing
@@ -229,12 +229,13 @@ def train_agent(env, agent, ennemy=None, player_input=-1, episodes=1000):
             # print(env)
         times.append(round(time.time() - start_time, 2))
         results.append(reward)
-        if ep % agent.update_rate == 0:  # Train every update_rate episodes
+        if ep > 25 and ep % agent.update_rate == 0:  # Train every update_rate episodes
             loss = agent.train()  
             losses.append(loss) 
             agent.update_eps()
             print(f"After ep {ep}: rewards of {sum(results[-agent.update_rate:]) / len(results[-agent.update_rate:]) * 100}%")
             # print(results[-agent.update_rate:])
+            print(agent.eps)
     return players, results, agent, times, losses
 
 
@@ -272,3 +273,41 @@ def play_website(env, agent, games = 3):
     click_img("opera", confidence=.5)
     print(player_log)
     print(agent_wins)
+
+
+def compare_2_agent(env, device, bs, update_rate, agent1_title: str, agent2_title: str, games: int = 100):
+    agent1 = Agent(device=device, batch_size=bs, update_rate=update_rate, eps=0)
+    agent1.model.load_state_dict(torch.load(agent1_title, weights_only=True))
+    agent1.model.eval()
+
+    agent2 = Agent(device=device, batch_size=bs, update_rate=update_rate, eps=0)
+    agent2.model.load_state_dict(torch.load(agent2_title, weights_only=True))
+    agent2.model.eval()
+
+    results = []
+    players = []
+    for ep in range(1, games + 1):
+        state, terminated = env.reset()
+        player = random.choice([1,2])
+        players.append(player)
+        opponent = player % 2 + 1
+        while not terminated:
+            if env.get_turn() == player:  # Agent to play
+                # print(state)
+                action = agent1.get_action(state)
+                # print("Agent Choice is :", action)
+                next_state, reward, terminated = env.step(player, action)
+                state = next_state
+
+            else:  # Opponent to play
+                action = agent2.get_action(state)
+                next_state, opponent_reward, terminated = env.step(opponent, action)
+                reward = -opponent_reward 
+                state = next_state
+        results.append(reward)
+    wins = np.count_nonzero([result == 1 for result in results])
+    draws = np.count_nonzero([result == 0 for result in results])
+    defeats = np.count_nonzero([result == -1 for result in results])
+    assert wins + draws + defeats == games, "Wrong number of games played"
+    print(f"After {games}, {agent1_title} won {wins} times, lost {defeats} times and made {draws} draws against {agent2_title}.")
+    print(results)
