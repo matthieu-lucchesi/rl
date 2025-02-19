@@ -3,6 +3,7 @@ import torch.nn as nn
 import torch
 import random
 import numpy as np
+import os
 
 class Brain(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
@@ -44,6 +45,9 @@ class Agent:
         else:
             state_tensor = torch.tensor(state, dtype=torch.float32, device=self.device).unsqueeze(0)
             q_values = self.model(state_tensor)
+            mask = torch.tensor([ele == 0 for ele in state], device=self.device)
+            q_values = q_values * mask  # bad if cell already taken 
+            print(q_values)
             return torch.argmax(q_values).item()
 
     def update_eps(self):
@@ -62,6 +66,7 @@ class Agent:
         rewards = torch.tensor(rewards, dtype=torch.float32, device=self.device)
         n_states = torch.tensor(np.array(n_states), dtype=torch.float32, device=self.device)
         terminateds = torch.tensor(terminateds, dtype=torch.float32, device=self.device)
+
         #loss
         ypred = self.model(states).gather(1, actions.unsqueeze(1)).squeeze(1)  # Select only values for actions made
         next_q_values = self.model(n_states).max(1)[0]  # Select max value for next state values
@@ -73,8 +78,11 @@ class Agent:
         self.optimizer.zero_grad()
         loss.backward()
         self.optimizer.step()
+
+        return loss.item()
+
     def save(self, name: str=None):
-        title = "tictactoe_agent" + name if name is not None else "" 
+        title =  name if name is not None else "tictactoe_agent"
         title += ".pth"
         torch.save(self.model.state_dict(), title)
         print(f"Model saved '{title}'")

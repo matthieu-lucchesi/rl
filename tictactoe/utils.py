@@ -184,10 +184,11 @@ def check_winner_after_cpu():
     return res
 
 
-def train_agent(env, agent, player_input=-1, episodes=1000):
+def train_agent(env, agent, ennemy=None, player_input=-1, episodes=1000):
     results = []
     players = []
     times = []
+    losses= []
     for ep in range(1, episodes + 1):
         start_time = time.time()
         state, terminated = env.reset()
@@ -203,7 +204,9 @@ def train_agent(env, agent, player_input=-1, episodes=1000):
             if env.get_turn() == player:  # Agent to play
                 # print("Agent")
                 agent_state = state.copy()
+                # print(state)
                 action = agent.get_action(state)
+                # print("Agent Choice is :", action)
                 next_state, reward, terminated = env.step(player, action)
                 agent_next_state = next_state.copy()
                 if terminated: 
@@ -212,6 +215,9 @@ def train_agent(env, agent, player_input=-1, episodes=1000):
 
             else:  # Opponent to play
                 opponent_action = random.choice([i for i in range(len(env.grid)) if env.grid[i] == 0])
+                if ennemy is not None:
+                    # print("Ennemy is smart")
+                    opponent_action = ennemy.get_action(state)
                 opponent_next_state, opponent_reward, opponent_terminated = env.step(opponent, opponent_action)
                 reward = -opponent_reward  # Negative reward when agent is loosing
                 if agent_state is not None:
@@ -224,13 +230,15 @@ def train_agent(env, agent, player_input=-1, episodes=1000):
         times.append(round(time.time() - start_time, 2))
         results.append(reward)
         if ep % agent.update_rate == 0:  # Train every update_rate episodes
-            agent.train()   
+            loss = agent.train()  
+            losses.append(loss) 
             agent.update_eps()
-            # print(f"After ep {ep}: rewards of {sum(results) / len(results) * 100}%")
-    return players, results, agent, times
+            print(f"After ep {ep}: rewards of {sum(results[-agent.update_rate:]) / len(results[-agent.update_rate:]) * 100}%")
+            # print(results[-agent.update_rate:])
+    return players, results, agent, times, losses
 
 
-def play_website(env, games = 3):
+def play_website(env, agent, games = 3):
     agent_wins = []
     player_log = []
     grid = env
@@ -242,7 +250,9 @@ def play_website(env, games = 3):
         grid.update_grid()
         print(grid)
         while not ending:
-            ending, winner = grid.play(player, index=-1)  # Agent learning this index !
+            print(grid.values)
+            index = agent.get_action(grid.values)
+            ending, winner = grid.play(player, index=index)  # Agent learning this index !
             print("played:")
             print(grid, "\n")
             if ending or winner:
