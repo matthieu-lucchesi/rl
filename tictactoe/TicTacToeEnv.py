@@ -10,25 +10,27 @@ class TictactoeEnv:
         return sum(self.grid**2) %2 + 1
     
     def step(self, player, action):
-        mooves = sum(self.grid**2)  # Id of the moove
         # X to play (player = 1 else player = 2)
-        assert mooves % 2 + 1 == player, "Wrong player."
-        self.grid[action] = player if player == 1 else -1  # 1 for X and -1 for O
-        indices = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0, 4, 8], [2,4,6]]
-        terminated = False
-        reward = 0
-        if any(np.abs(self.grid[vals].sum()) == 3 for vals in indices):
+        if self.grid[action] != 0:  # Played in bad position
+            reward = -5
             terminated = True
-            reward = 1  # player won !
-        if mooves == 8:
-            terminated = True
-        return self.grid, reward, terminated
+        else:
+            reward = .1
+            terminated = False
+            self.grid[action] = player if player == 1 else -1  # 1 for X and -1 for O
+            indices = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0, 4, 8], [2,4,6]]
+            if any(np.abs(self.grid[vals].sum()) == 3 for vals in indices):
+                terminated = True
+                reward = 1  # player won !
+            if sum(self.grid**2) == 9:  # Grid is full
+                terminated = True
+        return self.grid.copy(), reward, terminated
 
     
     def reset(self):
         self.grid = np.zeros((9))
         self.terminated = False
-        return self.grid, self.terminated
+        return self.grid.copy(), self.terminated
     
     def __str__(self):
         ligne_sep = "\n" + "-" * 11 + "\n"

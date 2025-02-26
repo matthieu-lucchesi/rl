@@ -4,6 +4,7 @@ import time
 import pyautogui
 import random
 import torch
+import os
 from tqdm import tqdm
 import copy
 
@@ -206,36 +207,43 @@ def train_agent(env, agent, ennemy=None, player_input=-1, episodes=1000):
             if env.get_turn() == player:  # Agent to play
                 agent_state = state.copy()
                 # print(state)
-                action = agent.get_action(state)
+                action = agent.get_action(state, p=False)
                 # print("Agent Choice is :", action)
                 next_state, reward, terminated = env.step(player, action)
                 agent_next_state = next_state.copy()
                 if terminated: 
-                    agent.store_exp(agent_state, action, reward, next_state, terminated)  # Store exp Agent ending the game
-                state = next_state
-
+                    agent.store_exp(agent_state, action, reward, agent_next_state, terminated)  # Store exp Agent ending the game
+                    rewards.append(reward)
+                state = next_state.copy()
             else:  # Opponent to play
                 opponent_action = random.choice([i for i in range(len(env.grid)) if env.grid[i] == 0])
-                if ennemy is not None:
+                if ennemy is not None and random.random() < 0.5:
                     opponent_action = ennemy.get_action(state)
-                opponent_next_state, opponent_reward, opponent_terminated = env.step(opponent, opponent_action)
-                reward = -opponent_reward  # Negative reward when agent is loosing
+        
+                opponent_next_state, opponent_reward, terminated = env.step(opponent, opponent_action)
+                # if agent_state is not None:
+                #     agent.store_exp(agent_state, action, reward, agent_next_state, terminated)  # Store exp after opponent played to check reward
+                state = opponent_next_state.copy()
                 if agent_state is not None:
-                    agent.store_exp(agent_state, action, reward, agent_next_state, terminated)  # Store exp after opponent played to check reward
-                state = opponent_next_state
-                terminated = opponent_terminated
+                    if terminated and opponent_reward == 1:  # Opponent won
+                        reward = -1 
+                    else:  # Agent didn't loose so he played a regular moove
+                        reward = 0.1
+                    agent.store_exp(agent_state, action, reward, agent_next_state, terminated)  
+                    rewards.append(reward)
+
             
-            rewards.append(reward)
-            # print(env)
         times.append(round(time.time() - start_time, 2))
         results.append(reward)
-        if ep > 25 and ep % agent.update_rate == 0:  # Train every update_rate episodes
-            loss = agent.train()  
+        if len(agent.memory) > agent.batch_size and ep % agent.update_rate == 0:  # Train every update_rate episodes
+            loss = agent.train_()  
             losses.append(loss) 
             agent.update_eps()
-            print(f"After ep {ep}: rewards of {sum(results[-agent.update_rate:]) / len(results[-agent.update_rate:]) * 100}%")
-            # print(results[-agent.update_rate:])
-            print(agent.eps)
+            # print(f"After ep {ep}: rewards of {sum(results[-agent.update_rate:]) / len(results[-agent.update_rate:]) * 100}%")
+            # print(agent.eps)
+            if ep % (3 * agent.update_rate) == 0:
+                agent.target_model.load_state_dict(agent.model.state_dict())
+                agent.target_model.eval() 
     return players, results, agent, times, losses
 
 
@@ -275,18 +283,24 @@ def play_website(env, agent, games = 3):
     print(agent_wins)
 
 
-def compare_2_agent(env, device, bs, update_rate, agent1_title: str, agent2_title: str, games: int = 100):
+def compare_2_agent(env, device, bs, update_rate, agent1_title: str, agent2_title: str | None, games: int = 100):
     agent1 = Agent(device=device, batch_size=bs, update_rate=update_rate, eps=0)
     agent1.model.load_state_dict(torch.load(agent1_title, weights_only=True))
     agent1.model.eval()
 
-    agent2 = Agent(device=device, batch_size=bs, update_rate=update_rate, eps=0)
-    agent2.model.load_state_dict(torch.load(agent2_title, weights_only=True))
-    agent2.model.eval()
+    if agent2_title is None:
+        agent2 = Agent(device=device, batch_size=bs, update_rate=update_rate, eps=1)  # Random with eps = 1
+        agent2.model.load_state_dict(torch.load(agent1_title, weights_only=True))
+        agent2.model.eval()
+        agent2_title = "RandomAgent"
+    else:
+        agent2 = Agent(device=device, batch_size=bs, update_rate=update_rate, eps=0)
+        agent2.model.load_state_dict(torch.load(agent2_title, weights_only=True))
+        agent2.model.eval()
 
     results = []
     players = []
-    for ep in range(1, games + 1):
+    for _ in range(1, games + 1):
         state, terminated = env.reset()
         player = random.choice([1,2])
         players.append(player)
@@ -309,5 +323,8 @@ def compare_2_agent(env, device, bs, update_rate, agent1_title: str, agent2_titl
     draws = np.count_nonzero([result == 0 for result in results])
     defeats = np.count_nonzero([result == -1 for result in results])
     assert wins + draws + defeats == games, "Wrong number of games played"
-    print(f"After {games}, {agent1_title} won {wins} times, lost {defeats} times and made {draws} draws against {agent2_title}.")
-    print(results)
+    print(f"Results of {os.path.basename(agent1_title)} VS {agent2_title} over {games} games:")
+    print(f"Played X {sum([1 for p in players if p == 1]) / games * 100:.2f}% of the time")
+    print(f"Wins : {wins / len(results) * 100:.2f}%")
+    print(f"Draws : {draws / len(results) * 100:.2f}%")
+    print(f"Loss : {defeats / len(results) * 100:.2f}%")

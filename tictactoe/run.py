@@ -13,35 +13,77 @@ start = time()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 device = "cpu"
 print(f"Using device: {device}")
-batch_size = 32
-update_rate = 10
+batch_size = 256
+update_rate = 50
 
 
-# ennemy = None
-# ennemy = Agent(device=device, batch_size=batch_size, update_rate=update_rate, eps=0)
-# ennemy.model.load_state_dict(torch.load(os.path.join("tictactoe", "agent2.pth"), weights_only=True))
-# ennemy.model.eval()
+ennemy = None
+ennemy = Agent(device=device, batch_size=batch_size, update_rate=update_rate, eps=0)
+ennemy.model.load_state_dict(torch.load(os.path.join("tictactoe", "c.pth"), weights_only=True))
+ennemy.model.eval()
 
-# env = TictactoeEnv()
-# agent = Agent(device=device, batch_size=batch_size, update_rate=update_rate, eps_decay=0.995, eps_min=0.05, lr=0.0001)
-# episodes = 8000
-
+env = TictactoeEnv()
+# agent = Agent(device=device, batch_size=batch_size, update_rate=update_rate, eps_decay=0.999, eps_min=0.1, lr=0.0001)
+# episodes = 2_000_000
 
 # players, results, agent, times, losses = utils.train_agent(env, agent, ennemy, player_input=-1, episodes=episodes)
-# print(agent.eps)
-# print(sum([1 for player in players if player == 1 ]) / episodes *100, "% of the time playing X")
-# print(sum(results) / len(results) * 100, "% of the time winning")
-# # print(times)
-# agent.save(os.path.join("tictactoe", "agent3"
+# print(times)
+print(f"Used {time()- start}s")
+# agent.save(os.path.join("tictactoe", "c"
 #                         # + str(episodes)+"VS15000"
 #                         ))
-
-# print(f"Used {time()- start}s")
-
 # plt.plot(losses)
 # plt.xlabel("Training Steps")
 # plt.ylabel("Loss")
+# plt.title("Évolution de la perte")
 # plt.show()
+# agent = Agent(device=device, batch_size=batch_size, update_rate=update_rate, eps=0)
+# agent.model.load_state_dict(torch.load(os.path.join("tictactoe", "b.pth"), weights_only=True))
+with torch.no_grad():
+    print(ennemy.get_action(torch.Tensor([
+        -1,0,-1,
+        1,1,0,
+        0,0,1
+        ])))
+
+
+
+# print(agent.model(torch.Tensor([-1,0,-1,0,0,0,0,1,1])))
+
+# agent.test(opponent_path=None,#os.path.join("tictactoe", "a.pth"),
+#     games=1000,
+#     p=True
+# )
+
+# env = TictactoeEnv()
+# agent = Agent(device=device, batch_size=batch_size, update_rate=update_rate, eps_decay=0.995, eps_min=0.05, lr=0.0001)
+# episodes = 20_000
+
+# players, results, agent, times, losses = utils.train_agent(env, agent, ennemy, player_input=-1, episodes=episodes)
+# # print(times)
+# agent.save(os.path.join("tictactoe", "agentrandom"
+#                         # + str(episodes)+"VS15000"
+#                         ))
+# utils.compare_2_agent(
+#     TictactoeEnv(),
+#     device,
+#     batch_size,
+#     update_rate,
+#     os.path.join("tictactoe", "agentrandom.pth"),
+#     # os.path.join("tictactoe", "agentVSrandom.pth"),
+#     None,
+#     games=10000
+# )
+
+
+
+
+
+# print(f"Épsilon final : {agent.eps}")
+# print(f"Joué en X {sum([1 for p in players if p == 1]) / episodes * 100:.2f}% du temps")
+# print(f"Taux de victoire : {sum(results) / len(results) * 100:.2f}%")
+
+
 
 
 # utils.compare_2_agent(
@@ -49,9 +91,10 @@ update_rate = 10
 #     device,
 #     batch_size,
 #     update_rate,
-#     os.path.join("tictactoe", "agent1.pth"),
-#     os.path.join("tictactoe", "agent2.pth"),
-#     games=100
+#     os.path.join("tictactoe", "agentTEST2.pth"),
+#     # os.path.join("tictactoe", "agentVSrandom.pth"),
+#     None,
+#     games=10000
 # )
 
 
