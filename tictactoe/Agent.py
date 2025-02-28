@@ -138,13 +138,16 @@ class Agent:
             while not terminated:
                 # print("|||||||||||||||||||||||||||||||||||||||||||||||||||||")
                 if env.get_turn() == player:  # Agent to play
-                    action = self.get_action(state)
+                    with torch.no_grad():
+                        action = self.get_action(state)
                     next_state, reward, terminated = env.step(player, action)
                     state = next_state
 
                 else:  # Opponent to play
-                    # action = opponent.get_action(state)
                     action = random.choice([i for i in range(len(state)) if state[i] == 0])
+                    if opponent_path != "RandomAgent":
+                        with torch.no_grad():
+                            action = opponent.get_action(state)
                     next_state, opponent_reward, terminated = env.step(opponent_id, action)
                     reward = -opponent_reward 
                     state = next_state

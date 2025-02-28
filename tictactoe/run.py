@@ -39,12 +39,12 @@ print(f"Used {time()- start}s")
 # plt.show()
 # agent = Agent(device=device, batch_size=batch_size, update_rate=update_rate, eps=0)
 # agent.model.load_state_dict(torch.load(os.path.join("tictactoe", "b.pth"), weights_only=True))
-with torch.no_grad():
-    print(ennemy.get_action(torch.Tensor([
-        -1,0,-1,
-        1,1,0,
-        0,0,1
-        ])))
+# with torch.no_grad():
+#     print(ennemy.get_action(torch.Tensor([
+#         -1,0,-1,
+#         1,1,0,
+#         0,0,1
+#         ])))
 
 
 
