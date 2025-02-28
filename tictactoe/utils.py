@@ -6,6 +6,7 @@ import random
 import torch
 import os
 from tqdm import tqdm
+import streamlit as st
 import copy
 
 from Agent import Agent
@@ -328,3 +329,205 @@ def compare_2_agent(env, device, bs, update_rate, agent1_title: str, agent2_titl
     print(f"Wins : {wins / len(results) * 100:.2f}%")
     print(f"Draws : {draws / len(results) * 100:.2f}%")
     print(f"Loss : {defeats / len(results) * 100:.2f}%")
+
+
+def init_st(player:int = 1):
+    """Init the session_state values."""
+    st.title("Morpion avec Streamlit")
+
+    if "board" not in st.session_state:
+        st.session_state.board = np.array([' ' for _ in range (9)])
+
+    if "game_ended" not in st.session_state:
+        st.session_state.game_ended = False
+
+    if "player" not in st.session_state:
+        st.session_state.player = player 
+
+    if "agent_score" not in st.session_state:
+        st.session_state.agent_score = 0
+
+    if "player_score" not in st.session_state:
+        st.session_state.player_score = 0
+
+def css_st():
+    return st.markdown(
+        """
+        <style> 
+        [class*="grid"] {
+            display: flex;
+            flex-wrap: wrap; 
+            justify-content: center; 
+            width: 100%; 
+            max-width: 500px; 
+            margin: 0; 
+            opacity: 0.4;
+            background-color: lightgreen !important;
+            padding: 1%; /* left and right */
+            gap: 0%;
+        }
+        [class*="grid"] > [class*="HorizontalBlock"] {
+            gap: 0% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+
+        [class*="cell"] {
+            flex: 1 1 calc(33.33% - 1%); 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2%  /* top and bottom*/;
+        }
+
+        [class*="cell"] button {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            background-color: #4CAF50 !important; 
+            line-height: 1 !important;   
+            border-radius: 5px;
+            border: 3px solid black !important;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2) !important;
+            transition: 0.2s;
+            display: flex !important;
+        }
+
+
+        [class*="cell"] button:not(:disabled):hover {
+            background-color: darkgreen !important; 
+            transform: scale(1.05); 
+        }
+
+        [class*="cell"] button:disabled{  /*After clicked*/
+            color: black !important;
+            font-size-adjust: 3 !important;
+            font-weight: bold !important;
+        }
+        
+
+        [class*="buttons"] {
+            display: flex;
+            justify-content: center; 
+            align-items: center; 
+        }
+
+        [class*="_button"] button {
+            background-color: grey !important;
+            color: white !important; 
+            font-size: 24px !important;
+            padding: 10px 20px !important;
+            border-radius: 5px; 
+            border: 2px solid black !important; 
+            transition: 0.2s;
+            min-width: 150px !important;  
+            height: 60px !important;      
+            white-space: nowrap !important;
+        }
+
+        [class*="_button"] button:not(:disabled):hover {
+            background-color: darkgrey !important; 
+            transform: scale(1.1); 
+        }
+
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+
+
+def launch_agent(agent_path):
+    """Load agent from path."""
+    agent = Agent(eps=0)
+    agent.model.load_state_dict(torch.load(os.path.join("tictactoe", agent_path), weights_only=True))
+    agent.model.eval()
+    return agent
+
+
+def play_agent(agent, grid):
+    """Play a move and random if can't predict."""
+    chars = {'O': -1, ' ': 0, 'X': 1}
+    grid = torch.FloatTensor([chars[ele] for ele in grid ], device=agent.device)
+    action = agent.get_action(grid)
+    if grid[action] != ' ':
+        action = random.choice([i for i in range(len(grid)) if grid[i] == 0])
+    return action
+
+
+def check_winner(grid):
+    indices = [[0,1,2], [3,4,5], [6,7,8], [0,3,6], [1,4,7], [2,5,8], [0, 4, 8], [2,4,6]]
+    res = 0
+    if any(np.array_equal(grid[vals], ['X','X','X']) for vals in indices):
+        res = 1
+    if any(np.array_equal(grid[vals], ['O','O','O']) for vals in indices):
+        res = 2
+    if res == 0 and all(cell != ' ' for cell in grid):
+        res = 3  # Tie
+    return res
+
+
+def check_winner_st():
+    """Check if there is a winner"""
+    winner = check_winner(st.session_state.board)
+    if winner and not st.session_state.game_ended:
+        if winner == 3:
+            st.session_state.winner_message = "Well played, it's a tie !"
+        elif winner == st.session_state.player:
+            st.session_state.player_score += 1
+            st.session_state.winner_message = "Player won !"
+        else:
+            st.session_state.agent_score += 1
+            st.session_state.winner_message = "Agent won !"
+        st.session_state.game_ended = True
+
+def board_st(agent: Agent):
+
+    if st.session_state.game_ended:
+        st.success(st.session_state.winner_message)
+    col1, col2 = st.columns([3, 1], vertical_alignment="center")
+    with st.container():
+        with col1:
+            with st.container(key="grid"):
+                for r in range(3):
+                    col = st.columns(3)
+                    for c in range(3):
+                        index = c + 3 * r
+                        with col[c]:
+                            disabled = st.session_state.board[index] != ' ' or st.session_state.game_ended
+                            if st.session_state.player == 2 and all(cell == ' ' for cell in st.session_state.board):
+                                action = play_agent(agent, st.session_state.board)
+                                st.session_state.board[action] = 'X'
+
+                            if st.button(st.session_state.board[index], key=f"cell-{index}", disabled=disabled):
+                                if st.session_state.board[index] == ' ' and not st.session_state.game_ended:
+                                    st.session_state.board[index] = 'X' if st.session_state.player == 1 else 'O'
+                                    check_winner_st()
+                                if not st.session_state.game_ended:
+                                    action = play_agent(agent, st.session_state.board)
+                                    st.session_state.board[action] = 'O' if st.session_state.player == 1 else 'X'
+                                    check_winner_st()
+                                st.rerun()
+        with col2:
+            st.subheader("Agent", divider="grey")
+            st.markdown(f"<h1 style='text-align: center; font-size: 36px;'>{st.session_state.agent_score}</h1>", unsafe_allow_html=True)
+            st.subheader("Player", divider="grey")
+            st.markdown(f"<h1 style='text-align: center; font-size: 36px;'>{st.session_state.player_score}</h1>", unsafe_allow_html=True)
+
+
+def play_reset_st():
+    col1, col2 = st.columns([3, 1], vertical_alignment="center")
+    with col1:
+        with st.container(key="buttons"):
+            col1, col2 = st.columns(2, gap="large")
+            with col1:
+                if st.button("Play", key="Play_button"):
+                    st.session_state.board = np.array([' ' for _ in range(9)])
+                    st.session_state.player = 3 - st.session_state.player
+                    st.session_state.game_ended = False
+                    st.rerun()  
+            with col2:
+                if st.button("Reset", key="Reset_button"):
+                    st.session_state.agent_score = 0
+                    st.session_state.player_score = 0
+                    st.rerun()  
