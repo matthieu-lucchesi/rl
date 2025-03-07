@@ -1,6 +1,7 @@
 import utils
-import streamlit as st
-import numpy as np
+
+# import streamlit as st
+# import numpy as np
 
 
 utils.init_st(player=1)

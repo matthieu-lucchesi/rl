@@ -1,6 +1,7 @@
 """Env to train faster than playing on the website"""
 import numpy as np
 
+
 class TictactoeEnv:
     def __init__(self):
         self.grid = np.zeros((9))

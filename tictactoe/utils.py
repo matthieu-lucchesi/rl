@@ -1,199 +1,21 @@
-import numpy as np
-import pyautogui 
-import time
-import pyautogui
-import random
-import torch
 import os
-from tqdm import tqdm
-import streamlit as st
-import copy
+import random
+import time
 
+import numpy as np
+import streamlit as st
+import torch
+from tqdm import tqdm
 from Agent import Agent
 
-def get_path(wsl_path):
-    wsl_path = "./tictactoe/images/" + wsl_path + ".png"
-    return wsl_path
-    # try:
-    #     win_path = subprocess.check_output(["wslpath", "-w", wsl_path]).decode("utf-8").strip()
-    #     return win_path
-    # except Exception as e:
-    #     print(f"Erreur lors de la conversion du chemin : {e}")
-    #     return wsl_path  
 
-def get_position_from_img(img, confidence=.9, prnt=False):
-    try:
-        return pyautogui.locateOnScreen(get_path(img), confidence=confidence)
-    except Exception as e:
-        if prnt:
-            print(f"Failed to locate {img} : {e}")
-        return False 
-    
-def get_center_from_img(img, confidence=.9, prnt=False):
-    try:
-        center = pyautogui.locateCenterOnScreen(get_path(img), confidence=confidence)
-        return int(center[0]), int(center[1])
-    except Exception as e:
-        if prnt:
-            print(f"Failed to locate {img} : {e}")
-        return False 
-
-def get_positions_from_img(img, confidence=.9, prnt=False):
-    try:
-        positions = pyautogui.locateAllOnScreen(get_path(img), confidence=confidence)
-        return list(positions)
-        # return [pyautogui.center(position) for position in positions]
-    except Exception as e:
-        if prnt:
-            print(f"Failed to locate {img} : {e}")
-        return False 
-    
-def click_pos(pos, wait=0.2):
-    """Go to pos in .25s then click then wait .2s."""
-    if len(pos) == 4:
-        pos = pyautogui.center(pos)
-    pyautogui.moveTo(pos, duration=0.25)
-    pyautogui.click()
-    time.sleep(wait)
-
-def click_img(img, confidence=0.9, wait=0.2):
-    """Go to center of img in .25s then click then wait .2s."""
-    pos_img = get_center_from_img(img, confidence=confidence)
-    if pos_img:
-        click_pos(pos_img, wait)
-    return pos_img
-
-def go_to_img(img, confidence=.9):
-    pos_img = get_center_from_img(img, confidence=confidence)
-    if pos_img:
-        pyautogui.moveTo(pos_img)
-    return pos_img
-
-def pick_color(player: int=None):
-    """Select player:
-        - X is 1
-        - O is 2
-        - random"""
-    if player is None:
-        player = random.random()
-    else:
-        player /= 2
-
-    # unselected_X = get_position_from_img("unselected_X", confidence=.999)
-    # unselected_O = get_position_from_img("unselected_O", confidence=.999)
-    if player <= 0.5:
-        unselected_X = get_position_from_img("unselected_X", confidence=0.2, prnt=True)
-        if unselected_X:
-            click_img("unselected_X")
-        return 1
-    else:
-        selected_X = get_center_from_img("selected_X", confidence=0.85, prnt=True)
-        if selected_X:
-            click_img("unselected_O")
-        return 2
-    
-def group_cells(cells_pos: list):
-    if not cells_pos:
-        return []
-    weight_test = cells_pos[0][2] // 2
-    height_test = cells_pos[0][3] // 2
-    grouped_cells_pos = []
-    for pos in cells_pos:
-        test = []
-        for grouped_pos in grouped_cells_pos:
-            test.append(abs(pos[0] - grouped_pos[0]) <= weight_test and abs(pos[1] - grouped_pos[1]) <= height_test)
-        if any(test):
-            continue
-        grouped_cells_pos.append(pos)
-    return grouped_cells_pos
-
-def extract_cells():
-    def detect_gird():
-        left, top, _, height = get_position_from_img("top_grid", confidence=.9)
-        top = top + height
-        right, bottom = get_center_from_img("right_grid", confidence=0.99)
-        width = right - left
-        height = bottom - top
-        grid = left, top, width, height
-        return grid
-    
-    grid = detect_gird()
-    cells = []
-    width = grid[2] // 3
-    height = grid[3] // 3
-    for row in range(3):
-        for col in range(3):
-            left, top = grid[0] + col * width, grid[1] + row * height
-            cells.append((left, top, width, height)) 
-    
-    return cells
-    
-def is_point_in_box(point, box):
-    x, y = point
-    x_min, y_min, w_max, h_max = box
-    x_max = x_min + w_max
-    y_max = y_min + h_max
-    return x_min <= x <= x_max and y_min <= y <= y_max
-
-def convert_cell_to_position(cells, positions):
-    return [[is_point_in_box(pyautogui.center(cell), position) for position in positions].index(1) for cell in cells]
-
-
-def detect_cells(positions):
-    # print(f"{positions=}")
-    empty_cells = group_cells(get_positions_from_img("empty_cell", confidence=0.8))
-    # print(f"{empty_cells=}")
-    empty_cells_index = convert_cell_to_position(empty_cells, positions)
-    # print(f"{empty_cells_index=}")
-    cells_X = group_cells(get_positions_from_img("cell_X", confidence=0.6))
-    # print(f"{cells_X=}")
-    cells_X_index = convert_cell_to_position(cells_X, positions)
-    # print(f"{cells_X_index=}")
-    cells_O = group_cells(get_positions_from_img("cell_O", confidence=0.6))
-    # print(f"{cells_O=}")
-    cells_O_index = convert_cell_to_position(cells_O, positions)
-    # print(f"{cells_O_index=}")
-    assert len(empty_cells_index + cells_X_index+ cells_O_index) == 9, "Unable to read the grid"
-    new_grid = np.zeros((9), dtype=int)
-    new_grid[cells_X_index] = 1
-    new_grid[cells_O_index] = -1
-    return new_grid
-    
-
-def start_game(player: int=None, first_init: bool=False):
-    if first_init:
-        click_img("opera", wait=0.5)
-    click_img("select_bot", wait=1)
-    player = pick_color(player)
-    click_img("play_button")
-    return player
-
-def reset(player):
-    click_img("reset_game", wait=1)
-    return start_game(player)
-
-def check_winner_after_cpu():
-    res = False, 0
-    if get_center_from_img("result_tie", confidence=.9, prnt=False):
-        print("result_tie")
-        res = True, 0
-    if get_center_from_img("result_X", confidence=.9, prnt=False):
-        assert not res[0], "Bad results to read"
-        print("result_X")
-        res = True, 1
-    if get_center_from_img("result_O", confidence=.9, prnt=False):
-        assert not res[0], "Bad results to read"
-        print("result_O")
-        res = True, 2
-    return res
-
-
-def train_agent(env, agent, ennemy=None, player_input=-1, episodes=1000):
+def train_agent(env, agent, ennemy=None, player_input=-1, episodes=1000, save_path="toto"):
     results = []
     players = []
     times = []
     losses= []
-    for ep in range(1, episodes + 1):
+    evolutions = []
+    for ep in tqdm(range(1, episodes + 1)):
         start_time = time.time()
         state, terminated = env.reset()
         agent_state = None
@@ -203,13 +25,10 @@ def train_agent(env, agent, ennemy=None, player_input=-1, episodes=1000):
             player = random.choice([1,2])
         players.append(player)
         opponent = player % 2 + 1
-        # print("Agent is player: ", player)
         while not terminated:
             if env.get_turn() == player:  # Agent to play
                 agent_state = state.copy()
-                # print(state)
                 action = agent.get_action(state, p=False)
-                # print("Agent Choice is :", action)
                 next_state, reward, terminated = env.step(player, action)
                 agent_next_state = next_state.copy()
                 if terminated: 
@@ -218,12 +37,13 @@ def train_agent(env, agent, ennemy=None, player_input=-1, episodes=1000):
                 state = next_state.copy()
             else:  # Opponent to play
                 opponent_action = random.choice([i for i in range(len(env.grid)) if env.grid[i] == 0])
-                if ennemy is not None and random.random() < 0.5:
-                    opponent_action = ennemy.get_action(state)
-        
+                if ennemy is not None:  # and random.random() < 0.5:
+                    with torch.no_grad():
+                        opponent_action = ennemy.get_action(state)
+                    if state[opponent_action] != 0:
+                        opponent_action = np.random.choice([i for i in range(9) if state[i] == 0])
+                    
                 opponent_next_state, opponent_reward, terminated = env.step(opponent, opponent_action)
-                # if agent_state is not None:
-                #     agent.store_exp(agent_state, action, reward, agent_next_state, terminated)  # Store exp after opponent played to check reward
                 state = opponent_next_state.copy()
                 if agent_state is not None:
                     if terminated and opponent_reward == 1:  # Opponent won
@@ -232,63 +52,29 @@ def train_agent(env, agent, ennemy=None, player_input=-1, episodes=1000):
                         reward = 0.1
                     agent.store_exp(agent_state, action, reward, agent_next_state, terminated)  
                     rewards.append(reward)
-
-            
         times.append(round(time.time() - start_time, 2))
         results.append(reward)
         if len(agent.memory) > agent.batch_size and ep % agent.update_rate == 0:  # Train every update_rate episodes
             loss = agent.train_()  
             losses.append(loss) 
             agent.update_eps()
-            # print(f"After ep {ep}: rewards of {sum(results[-agent.update_rate:]) / len(results[-agent.update_rate:]) * 100}%")
-            # print(agent.eps)
-            if ep % (3 * agent.update_rate) == 0:
+            if ep % (4 * agent.update_rate) == 0:
                 agent.target_model.load_state_dict(agent.model.state_dict())
-                agent.target_model.eval() 
+                agent.target_model.eval()
+                if ep % (1000 * agent.update_rate) == 0:
+                    print(f"{ep=}")
+                    new_ennemy = agent.evolution(ennemy, save_path=save_path)
+                    if new_ennemy is not ennemy:  # Si l'adversaire change, on stocke l'évolution
+                        ennemy = new_ennemy
+                        evolutions.append(ep)
+
     return players, results, agent, times, losses
-
-
-def play_website(env, agent, games = 3):
-    agent_wins = []
-    player_log = []
-    grid = env
-    player = grid.init_game(player=None, first_init=True)
-    for game_id in range(games):
-        ending = False
-        player_log.append(player)
-        time.sleep(.5)
-        grid.update_grid()
-        print(grid)
-        while not ending:
-            print(grid.values)
-            index = agent.get_action(grid.values)
-            ending, winner = grid.play(player, index=index)  # Agent learning this index !
-            print("played:")
-            print(grid, "\n")
-            if ending or winner:
-                break
-            time.sleep(1)
-            print("cpu played:")
-            ending, winner = grid.update_grid()
-            print(grid, "\n")
-        print("WINNER ", winner)
-        agent_wins.append(0 if winner == 0 else 1 if winner == player else -1)
-        time.sleep(1)
-        if game_id != games - 1:
-            player = grid.reset()
-        else:
-            click_img("reset_game")
-
-    click_img("opera", confidence=.5)
-    print(player_log)
-    print(agent_wins)
 
 
 def compare_2_agent(env, device, bs, update_rate, agent1_title: str, agent2_title: str | None, games: int = 100):
     agent1 = Agent(device=device, batch_size=bs, update_rate=update_rate, eps=0)
     agent1.model.load_state_dict(torch.load(agent1_title, weights_only=True))
     agent1.model.eval()
-
     if agent2_title is None:
         agent2 = Agent(device=device, batch_size=bs, update_rate=update_rate, eps=1)  # Random with eps = 1
         agent2.model.load_state_dict(torch.load(agent1_title, weights_only=True))
@@ -298,7 +84,6 @@ def compare_2_agent(env, device, bs, update_rate, agent1_title: str, agent2_titl
         agent2 = Agent(device=device, batch_size=bs, update_rate=update_rate, eps=0)
         agent2.model.load_state_dict(torch.load(agent2_title, weights_only=True))
         agent2.model.eval()
-
     results = []
     players = []
     for _ in range(1, games + 1):
@@ -313,7 +98,6 @@ def compare_2_agent(env, device, bs, update_rate, agent1_title: str, agent2_titl
                 # print("Agent Choice is :", action)
                 next_state, reward, terminated = env.step(player, action)
                 state = next_state
-
             else:  # Opponent to play
                 action = agent2.get_action(state)
                 next_state, opponent_reward, terminated = env.step(opponent, action)
@@ -349,6 +133,7 @@ def init_st(player:int = 1):
 
     if "player_score" not in st.session_state:
         st.session_state.player_score = 0
+
 
 def css_st():
     return st.markdown(
@@ -436,11 +221,12 @@ def css_st():
     )
 
 
-
 def launch_agent(agent_path):
     """Load agent from path."""
     agent = Agent(eps=0)
-    agent.model.load_state_dict(torch.load(os.path.join("tictactoe", agent_path), weights_only=True))
+    if "tictactoe" not in os.getcwd() and "app" not in os.getcwd():
+        agent_path = os.path.join("tictactoe", agent_path)
+    agent.model.load_state_dict(torch.load(agent_path, weights_only=True))
     agent.model.eval()
     return agent
 
@@ -480,6 +266,7 @@ def check_winner_st():
             st.session_state.agent_score += 1
             st.session_state.winner_message = "Agent won !"
         st.session_state.game_ended = True
+
 
 def board_st(agent: Agent):
 

@@ -1,29 +1,32 @@
-from collections import deque
 import copy
-import torch.nn as nn 
-import torch
 import random
-import numpy as np
-import os
+# import os
+from collections import deque
 
+import numpy as np
+import torch
+import torch.nn as nn
 from TicTacToeEnv import TictactoeEnv
+
 
 class Brain(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
         super(Brain, self).__init__()
         self.l1 = nn.Linear(input_size, hidden_size)
         self.l2 = nn.Linear(hidden_size, hidden_size)
-        self.l3 = nn.Linear(hidden_size, output_size)
+        self.l3 = nn.Linear(hidden_size, hidden_size)
+        self.l4 = nn.Linear(hidden_size, output_size)
 
     def forward(self, input):
         x = nn.functional.relu(self.l1(input))
         x = nn.functional.relu(self.l2(x))
-        x = self.l3(x)
+        x = nn.functional.relu(self.l3(x))
+        x = self.l4(x)
         return x
 
 
 class Agent:
-    def __init__(self, eps=1.0, eps_min=0.01, eps_decay=0.995, gamma=0.9, lr=0.001, batch_size=64, memory_size=512, update_rate=50, device="cpu"):
+    def __init__(self, eps=1.0, eps_min=0.05, eps_decay=0.999, gamma=0.9, lr=0.001, batch_size=64, memory_size=4096, update_rate=500, device="cpu"):
         # self.player = player  # 1 or 2; X or O
         self.eps = eps
         self.eps_decay = eps_decay
@@ -114,18 +117,28 @@ class Agent:
 
         return loss.item()
 
-    def test(self, opponent_path=None, games:int=100, p:bool = False):
+    def test_(self, opponent_path=None, opponent_model=None, games:int=100, p:bool = False):
+        """
+        Test the agent against opponent, can be a path to .pth model, default is random.
+        returns : players, wins, draws, defeats, unplayed
+        """
         self.model.eval()
         eps_before_test = self.eps
         self.eps = 0
-        if opponent_path is None:
-            opponent = Agent(device=self.device, batch_size=self.batch_size, update_rate=self.update_rate, eps=1)  # Random with eps = 1
-            opponent.model.eval()
-            opponent_path = "RandomAgent"
-        else:
-            opponent = Agent(device=self.device, batch_size=self.batch_size, update_rate=self.update_rate, eps=0)
+        opponent = Agent(device=self.device, batch_size=self.batch_size, update_rate=self.update_rate, eps=0)
+        
+        if opponent_path is not None:
             opponent.model.load_state_dict(torch.load(opponent_path, weights_only=True))
-            opponent.model.eval()
+        
+        elif opponent_model is not None:
+            opponent.model.load_state_dict(opponent_model.state_dict())
+            opponent_path = "SavedAgent"
+
+        else:
+            opponent.eps=1  # Random with eps = 1
+            opponent_path = "RandomAgent"
+        opponent.model.eval()
+
         results = []
         players = []
         env = TictactoeEnv()
@@ -134,9 +147,7 @@ class Agent:
             player = random.choice([1,2])
             players.append(player)
             opponent_id = player % 2 + 1
-            # print("Agent is ", player)
             while not terminated:
-                # print("|||||||||||||||||||||||||||||||||||||||||||||||||||||")
                 if env.get_turn() == player:  # Agent to play
                     with torch.no_grad():
                         action = self.get_action(state)
@@ -144,14 +155,13 @@ class Agent:
                     state = next_state
 
                 else:  # Opponent to play
-                    action = random.choice([i for i in range(len(state)) if state[i] == 0])
-                    if opponent_path != "RandomAgent":
-                        with torch.no_grad():
-                            action = opponent.get_action(state)
+                    with torch.no_grad():
+                        action = opponent.get_action(state)
+                    if state[action] != 0:
+                        action = np.random.choice([i for i in range(9) if state[i] == 0])
                     next_state, opponent_reward, terminated = env.step(opponent_id, action)
                     reward = -opponent_reward 
                     state = next_state
-                # print(env)
                 
             results.append(reward)
         wins = np.count_nonzero([result == 1 for result in results])
@@ -167,10 +177,33 @@ class Agent:
             print(f"Draws : {draws / len(results) * 100:.2f}%")
             print(f"Loss : {defeats / len(results) * 100:.2f}%")
         self.eps = eps_before_test
-        return players, wins, defeats
+        return players, wins, draws, defeats, unplayed
 
+    def evolution(self, ennemy, save_path:str, games=100):
+        _, wins, draws, defeats, unplayeds = self.test_(p=True, games=games)  # Against random
+        if wins / games >= 0.25 and defeats / games <= 0.15 and unplayeds <= 0.05:
+            _, wins, draws, defeats, unplayeds = self.test_(opponent_model=None if ennemy is None else ennemy.model, games=games)
+            if defeats / games <= 0.15 and unplayeds / games <= 0.05:
+                self.save(save_path)
+                new_ennemy = copy.deepcopy(self)
+                new_ennemy.model.load_state_dict(torch.load(save_path + ".pth", weights_only=True))  # Update ennemy
+                new_ennemy.eps = max(self.eps_min * 3, self.eps * 0.5)
+                print("\033[92m")
+                print(
+                    f"New evolution !\nAfter {games} games, Agent:"
+                    f"\twins: {wins/games*100}%"
+                    f"\tdraws: {draws/games*100}%"
+                    f"\tdefeats: {defeats/games*100}%"
+                    f"\tunplayeds: {unplayeds/games*100}%\n"
+                    f"Agent will be now training against current agent with eps = {new_ennemy.eps}."
+                    )
+                print("\033[0m")
+                return new_ennemy 
+        return ennemy
+    
     def save(self, name: str=None):
         title =  name if name is not None else "tictactoe_agent"
         title += ".pth"
         torch.save(self.model.state_dict(), title)
         print(f"Model saved '{title}'")
+
