@@ -26,7 +26,7 @@ class Brain(nn.Module):
 
 
 class Agent:
-    def __init__(self, eps=1.0, eps_min=0.05, eps_decay=0.999, gamma=0.9, lr=0.001, batch_size=64, memory_size=4096, update_rate=500, device="cpu"):
+    def __init__(self, eps=1.0, eps_min=0.05, eps_decay=0.999, gamma=0.9, lr=0.001, batch_size=64, memory_size=4096, update_rate=500, device="cpu", store_symmetries= True):
         # self.player = player  # 1 or 2; X or O
         self.eps = eps
         self.eps_decay = eps_decay
@@ -35,6 +35,7 @@ class Agent:
         self.batch_size = batch_size
         self.device = device
         self.update_rate = update_rate
+        self.store_symmetries = store_symmetries
 
 
         # Model parameters
@@ -44,7 +45,6 @@ class Agent:
         self.optimizer = torch.optim.Adam(self.model.parameters(), lr=lr)
         self.loss = nn.MSELoss()
         self.memory = deque(maxlen=memory_size)
-
 
     def get_action(self, state: np.array, p=False):
         if random.random() < self.eps:
@@ -64,8 +64,38 @@ class Agent:
         self.eps = max(self.eps * self.eps_decay, self.eps_min)
 
 
-    def store_exp(self, s, a, r, ns, terminated):
-        self.memory.append((s, a, r, ns, terminated))
+    def store_exp(self, state, action, reward, nstate, terminated):
+        def left_rotation(state, action):
+            """Return state and action after non-clockwise rotation."""
+            action_line = action // 3
+            action_column = action % 3
+            return np.rot90(state.reshape(3,3)).flatten(), 3 * (2 - action_column) + action_line
+        def horizontal_symmetry(state, action):
+            """Returns state and action after horizontal symmetry."""
+            action_line = action // 3
+            action_column = action % 3
+            return np.flip(state.reshape(3,3), axis=(0,)).flatten(), 3 * (2 - action_line) + action_column
+        def vertical_symmetry(state, action):
+            """Returns state and action after vertical symmetry."""
+            action_line = action // 3
+            action_column = action % 3
+            return np.flip(state.reshape(3,3), axis=(1,)).flatten(), 3 * action_line + ( 2 - action_column) 
+        def diag_symmetry(state, action):
+            """Returns state and action after diag symmetry (rot90+hsymm)."""
+            return horizontal_symmetry(*left_rotation(state, action))
+        def antidiag_symmetry(state, action):
+            """Returns state and action after antidiag symmetry (rot90+hsymm)."""
+            return left_rotation(*horizontal_symmetry(state, action))
+        
+        self.memory.append((state, action, reward, nstate, terminated))
+        if self.store_symmetries:
+            self.memory.append((*left_rotation(state, action), reward, left_rotation(nstate, action)[0], terminated))
+            self.memory.append((*left_rotation(*left_rotation(state, action)), reward, left_rotation(*left_rotation(nstate, action))[0], terminated))
+            self.memory.append((*left_rotation(*left_rotation(*left_rotation(state, action))), reward, left_rotation(*left_rotation(*left_rotation(nstate, action)))[0], terminated))
+            self.memory.append((*horizontal_symmetry(state, action), reward, horizontal_symmetry(nstate, action)[0], terminated))
+            self.memory.append((*vertical_symmetry(state, action), reward, vertical_symmetry(nstate, action)[0], terminated))
+            self.memory.append((*diag_symmetry(state, action), reward, diag_symmetry(nstate, action)[0], terminated))
+            self.memory.append((*antidiag_symmetry(state, action), reward, antidiag_symmetry(nstate, action)[0], terminated))
         # def pr(grid):
         #     ligne_sep = "\n" + "-" * 11 + "\n"
         #     new_vals = []
@@ -128,7 +158,8 @@ class Agent:
         opponent = Agent(device=self.device, batch_size=self.batch_size, update_rate=self.update_rate, eps=0)
         
         if opponent_path is not None:
-            opponent.model.load_state_dict(torch.load(opponent_path, weights_only=True))
+            opponent.model.load_state_dict(torch.load(opponent_path, map_location=self.device))  
+
         
         elif opponent_model is not None:
             opponent.model.load_state_dict(opponent_model.state_dict())

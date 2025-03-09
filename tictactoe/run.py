@@ -39,6 +39,7 @@ ennemy = None
 #     eps_decay=0.999,
 #     eps_min=0.05,
 #     lr=0.0001,
+#     store_symmetries=False
 # )
 # episodes = 5_000_00
 
@@ -54,8 +55,7 @@ ennemy = None
 # agent.save(
 #     os.path.join(
 #         "tictactoe",
-#         "d",
-#         # + str(episodes)+"VS15000"
+#         "testwithout",
 #     )
 # )
 
@@ -69,14 +69,14 @@ ennemy = None
 agent = Agent(device=device, batch_size=batch_size, update_rate=update_rate, eps=0)
 agent.model.load_state_dict(torch.load(os.path.join("tictactoe", "d.pth"), weights_only=True))
 agent.test_(p=True)
-agent.test_(opponent_path=os.path.join("tictactoe", "c.pth"), p=True, games=1000)
+agent.test_(opponent_path=os.path.join("tictactoe", "test.pth"), p=True, games=1000)
 
-with torch.no_grad():
-    print(agent.model(torch.Tensor([
-        0,0,0,
-        0,1,0,
-        0,-1,0
-        ])))
+# with torch.no_grad():
+#     print(agent.model(torch.Tensor([
+#         0,0,0,
+#         0,1,0,
+#         0,-1,0
+#         ])))
 
 
 # print(agent.model(torch.Tensor([-1,0,-1,0,0,0,0,1,1])))

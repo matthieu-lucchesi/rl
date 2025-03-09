@@ -41,7 +41,7 @@ The state is the grid, 9 digit with 0 for empty cell, -1 for 'O' and 1 for 'X'. 
 We are testing two modes. In the first one, the agent needs to learn the rules and is free to play in every cell. When choosing a non-empty cell, it ends the game and get a reward of -5.
 Reward of .1 if choosing a valid moove (empty cell). 1 if winning the game. If the agent loose after a moove, we store the previous moove and the agent gets reward of -1.
 
-### Deep Q-learning Neural Network
+## Deep Q-learning Neural Network
 The Agent is a DQN agent, model is 3 layers MLP. A target network is also used to predict the next q-values.
 
 $$
@@ -52,3 +52,9 @@ With $Q_{target}$ a copy of Q that represents the target model, updated each $n$
 $$
 Loss = MSE(Q(s), y_{target})
 $$
+
+## Agent
+Final agent is "final.pth". Agent learned the rules by negative reward, we tried to save symmetries while playing and the big step was to increase the number of the Brain layers from 1 hidden to two hidden layers.
+
+## Next steps
+Make a testsuite and be able to compare models. Improve tries on self play learning for versus game (chess...).
