@@ -58,3 +58,7 @@ Final agent is "final.pth". Agent learned the rules by negative reward, we tried
 
 ## Next steps
 Make a testsuite and be able to compare models. Improve tries on self play learning for versus game (chess...).
+
+
+
+# SURVIVAL AI: ROGUE SHOOTER 
