@@ -1,0 +1,157 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "maps/house1.tmx",
+    "expandedProjectPaths": [
+        "donjons",
+        ".",
+        "maps",
+        "houses"
+    ],
+    "file.lastUsedOpenFilter": "Tous les Fichiers (*)",
+    "fileStates": {
+        "donjons/tileset_dungeon.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "houses/house.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "houses/house1.tmx": {
+            "scale": 1.70525,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 117.5780677320041,
+                "y": 199.97067878610176
+            }
+        },
+        "maps/dungeon.tmx": {
+            "expandedObjectLayers": [
+                5
+            ],
+            "scale": 1,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 406.5,
+                "y": 367
+            }
+        },
+        "maps/dungeon1.tmx": {
+            "expandedObjectLayers": [
+                5
+            ],
+            "scale": 0.9298124999999999,
+            "selectedLayer": 6,
+            "viewCenter": {
+                "x": 404.92034684412175,
+                "y": 226.9274719365463
+            }
+        },
+        "maps/fight_world.tmx": {
+            "expandedObjectLayers": [
+                3
+            ],
+            "scale": 0.9298124999999999,
+            "selectedLayer": 3,
+            "viewCenter": {
+                "x": 404.92034684412175,
+                "y": 400.08066142367414
+            }
+        },
+        "maps/house.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "maps/house1.tmx": {
+            "expandedGroupLayers": [
+                15
+            ],
+            "expandedObjectLayers": [
+                7
+            ],
+            "scale": 1.5,
+            "selectedLayer": 6,
+            "viewCenter": {
+                "x": 192.33333333333334,
+                "y": 273.33333333333326
+            }
+        },
+        "maps/house2.tmx": {
+            "expandedObjectLayers": [
+                3
+            ],
+            "scale": 1.5,
+            "selectedLayer": 6,
+            "viewCenter": {
+                "x": 165,
+                "y": 200.66666666666669
+            }
+        },
+        "maps/nature.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "maps/world.tmx": {
+            "expandedGroupLayers": [
+                14
+            ],
+            "expandedObjectLayers": [
+                7
+            ],
+            "scale": 1.5,
+            "selectedLayer": 4,
+            "viewCenter": {
+                "x": 231.66666666666666,
+                "y": 260.6666666666667
+            }
+        },
+        "maps/world.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "pnjs/boss.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "last.externalTilesetPath": "//wsl.localhost/Ubuntu/home/mli/workspace/reinforcement_learning/shooter/assets/maps",
+    "last.imagePath": "//wsl.localhost/Ubuntu/home/mli/workspace/reinforcement_learning/shooter/assets/pnjs",
+    "map.height": 50,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 50,
+    "openFiles": [
+        "maps/world.tmx",
+        "maps/house1.tmx",
+        "maps/house2.tmx",
+        "maps/dungeon1.tmx",
+        "maps/fight_world.tmx",
+        "pnjs/boss.tsx"
+    ],
+    "project": "shooter.tiled-project",
+    "recentFiles": [
+        "maps/world.tmx",
+        "pnjs/boss.tsx",
+        "maps/fight_world.tmx",
+        "maps/dungeon1.tmx",
+        "maps/house2.tmx",
+        "maps/house1.tmx",
+        "maps/house.tsx",
+        "donjons/tileset_dungeon.tsx",
+        "maps/dungeon.tmx",
+        "maps/nature.tsx",
+        "maps/world.tsx",
+        "houses/house1.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    },
+    "tileset.transparentColor": "#000000",
+    "tileset.useTransparentColor": true
+}
