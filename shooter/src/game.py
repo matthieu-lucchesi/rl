@@ -10,8 +10,11 @@ class Game:
         self.screen = pygame.display.set_mode((800,600))
         pygame.display.set_caption("Survival AI - Shooter")
 
-         #Add player
-        self.player = Player() #player_position.x, player_position.y)
+         #Add Sprites and Player
+        self.all_sprites = pygame.sprite.Group()
+        self.player = Player(self.all_sprites)
+
+        
         self.map_manager = MapManager(self.screen, self.player)
 
     def handle_input(self):
@@ -28,6 +31,9 @@ class Game:
         if pressed[pygame.K_d]:
             self.player.move_right()
             self.player.change_animation("right")
+        if pressed[pygame.K_SPACE]:
+            self.player.equipement["Helmet"] = 1 - self.player.equipement["Helmet"]
+            # self.player.update_equipements()
 
 
     def update(self):
@@ -42,6 +48,7 @@ class Game:
             
             self.update()
             self.map_manager.draw()
+
             pygame.display.flip()
 
             for event in pygame.event.get():

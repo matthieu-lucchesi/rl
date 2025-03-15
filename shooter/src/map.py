@@ -66,8 +66,8 @@ class MapManager:
     
     def teleport_player(self, name):
         point = self.get_object(name)
-        self.player.position[0] = point.x
-        self.player.position[1] = point.y
+        self.player.position[0] = point.x - self.player.rect.width // 2
+        self.player.position[1] = point.y - self.player.rect.height // 2
         self.player.save_position()
 
 
@@ -90,10 +90,10 @@ class MapManager:
             if layer.name == "above_player":
                 break 
             layer_index +=1
-        print(layer_index)
         group = pyscroll.PyscrollGroup(map_layer=map_layers, default_layer=layer_index)  # TODO This is not working, always first taken for PyscrollGroup
         group.add(self.player)
-
+        group.add(self.player.all_sprites)
+        
         # Create map
         self.maps[name] = Map(name, walls, group, tmx_data, portals)
 
@@ -104,10 +104,9 @@ class MapManager:
 
     def draw(self):
         self.get_group().draw(self.screen)
-
         self.get_group().center(self.player.rect.center)
+
 
     def update(self):
         self.get_group().update()
         self.check_collisions()
-        

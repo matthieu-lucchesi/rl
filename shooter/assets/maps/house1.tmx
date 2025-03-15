@@ -207,7 +207,7 @@
  <objectgroup id="7" name="Objects">
   <object id="2" type="collision" x="318.27" y="287.802" width="28.725" height="29.7214"/>
   <object id="1" name="exit_house1" x="53.4985" y="372.012" width="20.3096" height="7.9257"/>
-  <object id="4" name="enter_house1_spawn" x="31.6971" y="285.999">
+  <object id="4" name="enter_house1_spawn" x="62.3638" y="314.666">
    <point/>
   </object>
   <object id="5" type="collision" x="8.67156" y="10.5986" width="390.22" height="35.6498"/>
@@ -216,9 +216,6 @@
   <object id="8" type="collision" x="382.512" y="44.3213" width="16.3796" height="339.155"/>
   <object id="9" type="collision" x="14.4526" y="191.738" width="239.913" height="28.9052"/>
   <object id="10" type="collision" x="335.3" y="193.665" width="45.2848" height="28.9052"/>
-  <object id="11" name="player" x="243.333" y="110">
-   <point/>
-  </object>
   <object id="12" type="collision" x="190" y="259.333" width="13.3333" height="11.3333"/>
  </objectgroup>
 </map>

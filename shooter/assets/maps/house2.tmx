@@ -218,7 +218,7 @@
   <object id="11" type="collision" x="230.667" y="224" width="12" height="11.3333"/>
   <object id="13" type="collision" x="174.667" y="142.667" width="30.6667" height="12.6667"/>
   <object id="14" type="collision" x="318.667" y="145.333" width="29.3333" height="9.33333"/>
-  <object id="15" name="enter_house2_spawn" x="46.6667" y="268.667">
+  <object id="15" name="enter_house2_spawn" x="67.3334" y="286">
    <point/>
   </object>
   <object id="16" name="exit_house2" x="52" y="324" width="22" height="8.66667"/>

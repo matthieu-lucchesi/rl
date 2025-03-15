@@ -3,15 +3,68 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "maps/house1.tmx",
+    "activeFile": "player/player/Base_boy.tmx",
     "expandedProjectPaths": [
+        "maps",
+        "player/player",
         "donjons",
         ".",
-        "maps",
-        "houses"
+        "houses",
+        "pnjs",
+        "player"
     ],
     "file.lastUsedOpenFilter": "Tous les Fichiers (*)",
     "fileStates": {
+        "C:/Users/lucch/Downloads/craftpix-net-870940-free-base-4-direction-male-character-pixel-art/Tiled_files/Base_boy.tmx": {
+            "scale": 0.904326923076923,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 415.77884104199904,
+                "y": 128.2721956406167
+            }
+        },
+        "C:/Users/lucch/Downloads/craftpix-net-870940-free-base-4-direction-male-character-pixel-art/Tiled_files/Base_boy.tmx#Sword_Death": {
+            "scaleInDock": 1
+        },
+        "C:/Users/lucch/Downloads/craftpix-net-870940-free-base-4-direction-male-character-pixel-art/Tiled_files/Base_boy.tmx#Sword_Hurt": {
+            "scaleInDock": 1
+        },
+        "C:/Users/lucch/Downloads/craftpix-net-870940-free-base-4-direction-male-character-pixel-art/Tiled_files/Base_boy.tmx#Sword_Idle": {
+            "scaleInDock": 1
+        },
+        "C:/Users/lucch/Downloads/craftpix-net-870940-free-base-4-direction-male-character-pixel-art/Tiled_files/Base_boy.tmx#Sword_Run": {
+            "scaleInDock": 1
+        },
+        "C:/Users/lucch/Downloads/craftpix-net-870940-free-base-4-direction-male-character-pixel-art/Tiled_files/Base_boy.tmx#Sword_Run_Attack": {
+            "scaleInDock": 1
+        },
+        "C:/Users/lucch/Downloads/craftpix-net-870940-free-base-4-direction-male-character-pixel-art/Tiled_files/Base_boy.tmx#Sword_Walk": {
+            "scaleInDock": 1
+        },
+        "C:/Users/lucch/Downloads/craftpix-net-870940-free-base-4-direction-male-character-pixel-art/Tiled_files/Base_boy.tmx#Sword_Walk_Attack": {
+            "scaleInDock": 1
+        },
+        "C:/Users/lucch/Downloads/craftpix-net-870940-free-base-4-direction-male-character-pixel-art/Tiled_files/Base_boy.tmx#Sword_attack": {
+            "scaleInDock": 1
+        },
+        "C:/Users/lucch/Downloads/craftpix-net-870940-free-base-4-direction-male-character-pixel-art/Tiled_files/Base_boy.tmx#Unarmed_Death": {
+            "scaleInDock": 1
+        },
+        "C:/Users/lucch/Downloads/craftpix-net-870940-free-base-4-direction-male-character-pixel-art/Tiled_files/Base_boy.tmx#Unarmed_Hurt": {
+            "scaleInDock": 1
+        },
+        "C:/Users/lucch/Downloads/craftpix-net-870940-free-base-4-direction-male-character-pixel-art/Tiled_files/Base_boy.tmx#Unarmed_Idle": {
+            "scaleInDock": 1
+        },
+        "C:/Users/lucch/Downloads/craftpix-net-870940-free-base-4-direction-male-character-pixel-art/Tiled_files/Base_boy.tmx#Unarmed_Run": {
+            "scaleInDock": 1
+        },
+        "C:/Users/lucch/Downloads/craftpix-net-870940-free-base-4-direction-male-character-pixel-art/Tiled_files/Base_boy.tmx#Unarmed_Walk": {
+            "scaleInDock": 1
+        },
+        "C:/Users/lucch/Downloads/craftpix-net-870940-free-base-4-direction-male-character-pixel-art/Tiled_files/Base_boy.tmx#shadow": {
+            "scaleInDock": 1
+        },
         "donjons/tileset_dungeon.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
@@ -46,8 +99,8 @@
             "scale": 0.9298124999999999,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 404.92034684412175,
-                "y": 226.9274719365463
+                "x": 399.5429185991799,
+                "y": 399.0051757746857
             }
         },
         "maps/fight_world.tmx": {
@@ -57,8 +110,8 @@
             "scale": 0.9298124999999999,
             "selectedLayer": 3,
             "viewCenter": {
-                "x": 404.92034684412175,
-                "y": 400.08066142367414
+                "x": 399.5429185991799,
+                "y": 399.0051757746857
             }
         },
         "maps/house.tsx": {
@@ -73,10 +126,10 @@
                 7
             ],
             "scale": 1.5,
-            "selectedLayer": 6,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 192.33333333333334,
-                "y": 273.33333333333326
+                "x": 200.33333333333334,
+                "y": 199.33333333333334
             }
         },
         "maps/house2.tmx": {
@@ -84,10 +137,10 @@
                 3
             ],
             "scale": 1.5,
-            "selectedLayer": 6,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 165,
-                "y": 200.66666666666669
+                "x": 200.33333333333334,
+                "y": 199.33333333333334
             }
         },
         "maps/nature.tsx": {
@@ -102,15 +155,66 @@
                 7
             ],
             "scale": 1.5,
-            "selectedLayer": 4,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 231.66666666666666,
-                "y": 260.6666666666667
+                "x": 265,
+                "y": 179.33333333333334
             }
         },
         "maps/world.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
+        },
+        "player/player/Base_boy.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 312.5,
+                "y": 127
+            }
+        },
+        "player/player/Base_boy.tmx#Sword_Death": {
+            "scaleInDock": 1
+        },
+        "player/player/Base_boy.tmx#Sword_Hurt": {
+            "scaleInDock": 1
+        },
+        "player/player/Base_boy.tmx#Sword_Idle": {
+            "scaleInDock": 1
+        },
+        "player/player/Base_boy.tmx#Sword_Run": {
+            "scaleInDock": 1
+        },
+        "player/player/Base_boy.tmx#Sword_Run_Attack": {
+            "scaleInDock": 1
+        },
+        "player/player/Base_boy.tmx#Sword_Walk": {
+            "scaleInDock": 1
+        },
+        "player/player/Base_boy.tmx#Sword_Walk_Attack": {
+            "scaleInDock": 1
+        },
+        "player/player/Base_boy.tmx#Sword_attack": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "player/player/Base_boy.tmx#Unarmed_Death": {
+            "scaleInDock": 1
+        },
+        "player/player/Base_boy.tmx#Unarmed_Hurt": {
+            "scaleInDock": 1
+        },
+        "player/player/Base_boy.tmx#Unarmed_Idle": {
+            "scaleInDock": 1
+        },
+        "player/player/Base_boy.tmx#Unarmed_Run": {
+            "scaleInDock": 1
+        },
+        "player/player/Base_boy.tmx#Unarmed_Walk": {
+            "scaleInDock": 1
+        },
+        "player/player/Base_boy.tmx#shadow": {
+            "scaleInDock": 1
         },
         "pnjs/boss.tsx": {
             "scaleInDock": 1,
@@ -118,7 +222,7 @@
         }
     },
     "last.externalTilesetPath": "//wsl.localhost/Ubuntu/home/mli/workspace/reinforcement_learning/shooter/assets/maps",
-    "last.imagePath": "//wsl.localhost/Ubuntu/home/mli/workspace/reinforcement_learning/shooter/assets/pnjs",
+    "last.imagePath": "//wsl.localhost/Ubuntu/home/mli/workspace/reinforcement_learning/shooter/assets/player",
     "map.height": 50,
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 16,
@@ -130,22 +234,23 @@
         "maps/house2.tmx",
         "maps/dungeon1.tmx",
         "maps/fight_world.tmx",
-        "pnjs/boss.tsx"
+        "pnjs/boss.tsx",
+        "player/player/Base_boy.tmx"
     ],
     "project": "shooter.tiled-project",
     "recentFiles": [
-        "maps/world.tmx",
         "pnjs/boss.tsx",
-        "maps/fight_world.tmx",
-        "maps/dungeon1.tmx",
-        "maps/house2.tmx",
+        "player/player/Base_boy.tmx",
+        "maps/world.tmx",
         "maps/house1.tmx",
+        "maps/house2.tmx",
+        "maps/dungeon1.tmx",
+        "maps/fight_world.tmx",
+        "C:/Users/lucch/Downloads/craftpix-net-870940-free-base-4-direction-male-character-pixel-art/Tiled_files/Base_boy.tmx",
         "maps/house.tsx",
         "donjons/tileset_dungeon.tsx",
         "maps/dungeon.tmx",
-        "maps/nature.tsx",
-        "maps/world.tsx",
-        "houses/house1.tmx"
+        "maps/nature.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
