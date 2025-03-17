@@ -166,7 +166,7 @@
  <objectgroup id="3" name="Objects">
   <object id="1" type="collision" x="0" y="0" width="800" height="16"/>
   <object id="2" type="collision" x="784" y="16" width="16" height="768"/>
-  <object id="4" type="collision" x="0" y="784" width="784"/>
+  <object id="4" type="collision" x="0" y="784" width="784" height="16"/>
   <object id="5" type="collision" x="0" y="16" width="16" height="768"/>
   <object id="7" name="enter_fight_world_spawn" x="397.93" y="395.779">
    <point/>

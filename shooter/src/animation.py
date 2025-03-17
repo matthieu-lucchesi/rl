@@ -19,6 +19,7 @@ class AnimatedSprite(pygame.sprite.Sprite):
             "up": {},
         }
         self.current_direction = "down"
+        self.current_action = "Unarmed_Idle"
 
         for key, path in self.dict_action_path.items():
             self.get_images(key, path, [64, 64])
@@ -50,10 +51,14 @@ class AnimatedSprite(pygame.sprite.Sprite):
             self.images[directions[y // size[1]]][key] = images
 
     def change_animation(self, direction, action="Unarmed_Walk"):
+        if self.current_direction != direction or self.current_action != action:
+            self.animation_index = 0 
+        
+        self.current_direction = direction
+        self.current_action = action
         self.image = self.images[direction][action][self.animation_index]
         self.image.set_colorkey([0, 0, 0])
-        self.current_direction = direction
-        self.clock += self.speed * 15
+        self.clock += self.speed * 10
         if self.clock % 100 == 0:
             self.animation_index = (self.animation_index + 1) % len(self.images[direction][action])
             

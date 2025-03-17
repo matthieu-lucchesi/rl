@@ -12,14 +12,13 @@ if __name__ == "__main__":
     
 
 
+# TODO imporve :
+# - be able to equip or unequip items ... (make them more smooth)
+# - ATH for player (HP, mana, XP, defense, spd) (need imprevements ...)
+# - attack with sword (need to add with equipement)
+
 # TODO :
-# - be able to equip or unequip items
-# - ATH for player (HP, mana, XP, defense, spd)
-# - attack with sword
 # - spawn ennemies
 # - moove ennemies
 # - attack ennemies
 # - take damage
-# - attack with sword
-# - attack with sword
-# - attack with sword

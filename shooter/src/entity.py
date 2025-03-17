@@ -1,12 +1,23 @@
 import os
+import time
 import pygame
 
 from src.animation import AnimatedSprite
 
 class Entity(AnimatedSprite):
-    def __init__(self, name, x, y):
+    def __init__(self, name, x, y, hpmax=100, armor=10, speed=10, manamax=10, attack=86):
         super().__init__(name)
         self.equipement = {}
+        self.stats = {
+        "hpmax" : hpmax,
+        "armor" : armor,
+        "speed" : speed,
+        "manamax" : manamax,
+        "attack" : attack,
+        "hp" : hpmax,
+        "mana" : manamax,
+        }
+
         self.change_animation("down")
         self.rect = self.image.get_rect()
         self.position = [x, y]
@@ -46,8 +57,10 @@ class Player(Entity):
             "right": {},
             "up": {},
         }
-        self.current_action = "Unarmed_Walk"
-        
+        self.current_action = "Unarmed_Idle"
+        self.attacking1 = False
+        self.attack_timer = 0  # Timer to control attack animation speed
+
         self.get_equipement_paths()
         for equipement in self.equipement_action_dict.keys():
             for action, path in self.equipement_action_dict[equipement].items():
@@ -102,17 +115,49 @@ class Player(Entity):
                 images.append(image)
             self.equipement_images[directions[y // size[1]]][action][equipement] = images
     
+    def attack1(self):
+        if self.attacking1:
+            return  # Break if already attacking
+        self.attacking1 = True
+        self.current_action = "Sword_Walk_Attack"
+        self.animation_index = 0
+        self.attack_timer = time.time()  # Start attack timer
+
+        for equipement, sprite in self.equipement_sprites.items():
+            if self.equipement[equipement]:  # If the equipment is active
+                sprite.update()  # Force update equipment sprite
 
     def update_equipement(self):
         """Active ou désactive les équipements en fonction de leur état."""
         for equipement, equipped in self.equipement.items():
             sprite = self.equipement_sprites[equipement]
             sprite.visible = equipped
+            sprite.update()
 
     def update(self):
         """Met à jour le joueur et ses équipements."""
         super().update()
         self.update_equipement()
+        print(self.attacking1, self.animation_index)
+        if self.attacking1:
+            if time.time() - self.attack_timer > 0.05:  # Change de frame toutes les 0.1s
+                self.attack_timer = time.time()  # Réinitialise le timer
+                self.animation_index += 1
+
+                # Vérifie si l'animation est terminée
+                if self.animation_index >= len(self.images[self.current_direction][self.current_action]):
+                    self.attacking1 = False  # Fin de l'attaque
+                    self.current_action = "Unarmed_Walk"
+                    self.animation_index = 0  # Remet à la première frame
+                else:
+                    # Met à jour l'image du joueur
+                    self.image = self.images[self.current_direction][self.current_action][self.animation_index]
+                    self.image.set_colorkey([0, 0, 0])
+
+                    # Met à jour l'équipement
+                    for equipement, sprite in self.equipement_sprites.items():
+                        if self.equipement[equipement]:  
+                            sprite.image = sprite.images[self.current_direction][self.current_action][self.animation_index]
 
 
 class EquipmentSprite(pygame.sprite.Sprite):
@@ -124,11 +169,11 @@ class EquipmentSprite(pygame.sprite.Sprite):
         self.image = self.images[self.player.current_direction][self.player.current_action][0] 
         self.rect = self.image.get_rect()
         self.feet = player.feet
-        self.visible = False
+        self.visible = False  # Equipement not visible if unequipped
 
     def update(self):
         if not self.visible:
-            self.image.set_alpha(0)  # Rendre invisible
+            self.image = pygame.Surface((0, 0)) # Rendre invisible
             return
         
         direction = self.player.current_direction  
