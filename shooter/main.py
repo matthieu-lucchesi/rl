@@ -8,7 +8,6 @@ if __name__ == "__main__":
     game.run()
     pygame.quit()
 
-
     
 
 
@@ -16,9 +15,12 @@ if __name__ == "__main__":
 # - be able to equip or unequip items ... (make them more smooth)
 # - ATH for player (HP, mana, XP, defense, spd) (need imprevements ...)
 # - attack with sword (need to add with equipement)
+# - moove ennemies ()
+
+
+# DONE:
+# - spawn ennemies
 
 # TODO :
-# - spawn ennemies
-# - moove ennemies
 # - attack ennemies
 # - take damage

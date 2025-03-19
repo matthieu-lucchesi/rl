@@ -382,7 +382,7 @@
 </data>
  </layer>
  <objectgroup id="7" name="Objects">
-  <object id="1" name="player" x="150.221" y="51.6462">
+  <object id="1" name="player" x="414.221" y="418.646">
    <point/>
   </object>
   <object id="5" type="collision" x="0" y="0" width="799" height="30"/>

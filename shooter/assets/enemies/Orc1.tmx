@@ -1101,8 +1101,8 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="1153" name="orc1_walk_attack_front _full" tilewidth="16" tileheight="16" tilecount="384" columns="24">
-  <image source="orc1_walk_attack_front _full.png" width="384" height="256"/>
+ <tileset firstgid="1153" name="orc1_walk_attack_full" tilewidth="16" tileheight="16" tilecount="384" columns="24">
+  <image source="orc1_walk_attack_full.png" width="384" height="256"/>
   <tile id="24">
    <animation>
     <frame tileid="24" duration="150"/>
@@ -1889,8 +1889,8 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="2049" name="orc1_run_attack_front_full" tilewidth="16" tileheight="16" tilecount="512" columns="32">
-  <image source="orc1_run_attack_front_full.png" width="512" height="256"/>
+ <tileset firstgid="2049" name="orc1_run_attack_full" tilewidth="16" tileheight="16" tilecount="512" columns="32">
+  <image source="orc1_run_attack_full.png" width="512" height="256"/>
   <tile id="1">
    <animation>
     <frame tileid="1" duration="150"/>
@@ -3217,7 +3217,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="3713" name="orc1_run_attack_front_full" tilewidth="16" tileheight="16" tilecount="512" columns="32">
+ <tileset firstgid="3713" name="orc1_run_attack_full" tilewidth="16" tileheight="16" tilecount="512" columns="32">
   <image source="orc1_run_attack_swing.png" width="512" height="256"/>
   <tile id="1">
    <animation>
@@ -3844,7 +3844,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="4225" name="orc1_walk_attack_front _full" tilewidth="16" tileheight="16" tilecount="384" columns="24">
+ <tileset firstgid="4225" name="orc1_walk_attack_full" tilewidth="16" tileheight="16" tilecount="384" columns="24">
   <image source="orc1_walk_attack_swing.png" width="384" height="256"/>
   <tile id="24">
    <animation>
@@ -5571,7 +5571,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="5633" name="orc1_run_attack_front_full" tilewidth="16" tileheight="16" tilecount="512" columns="32">
+ <tileset firstgid="5633" name="orc1_run_attack_full" tilewidth="16" tileheight="16" tilecount="512" columns="32">
   <image source="orc1_run_attack_swing.png" width="512" height="256"/>
   <tile id="1">
    <animation>
@@ -6198,7 +6198,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="6145" name="orc1_walk_attack_front _full" tilewidth="16" tileheight="16" tilecount="384" columns="24">
+ <tileset firstgid="6145" name="orc1_walk_attack_full" tilewidth="16" tileheight="16" tilecount="384" columns="24">
   <image source="orc1_walk_attack_swing.png" width="384" height="256"/>
   <tile id="24">
    <animation>
@@ -7034,7 +7034,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="7041" name="orc1_walk_attack_front _full" tilewidth="16" tileheight="16" tilecount="384" columns="24">
+ <tileset firstgid="7041" name="orc1_walk_attack_full" tilewidth="16" tileheight="16" tilecount="384" columns="24">
   <image source="orc1_walk_attack_sword_back.png" width="384" height="256"/>
   <tile id="24">
    <animation>
@@ -7822,7 +7822,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="7937" name="orc1_run_attack_front_full" tilewidth="16" tileheight="16" tilecount="512" columns="32">
+ <tileset firstgid="7937" name="orc1_run_attack_full" tilewidth="16" tileheight="16" tilecount="512" columns="32">
   <image source="orc1_run_attack_sword_back.png" width="512" height="256"/>
   <tile id="1">
    <animation>
@@ -10076,7 +10076,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="10369" name="orc1_walk_attack_front _full" tilewidth="16" tileheight="16" tilecount="384" columns="24">
+ <tileset firstgid="10369" name="orc1_walk_attack_full" tilewidth="16" tileheight="16" tilecount="384" columns="24">
   <image source="orc1_walk_attack_body.png" width="384" height="256"/>
   <tile id="24">
    <animation>
@@ -10549,7 +10549,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="10753" name="orc1_run_attack_front_full" tilewidth="16" tileheight="16" tilecount="512" columns="32">
+ <tileset firstgid="10753" name="orc1_run_attack_full" tilewidth="16" tileheight="16" tilecount="512" columns="32">
   <image source="orc1_run_attack_body.png" width="512" height="256"/>
   <tile id="1">
    <animation>
@@ -12956,7 +12956,7 @@
   </tile>
  </tileset>
  <tileset firstgid="13441" name="orc1_run_full" tilewidth="16" tileheight="16" tilecount="512" columns="32">
-  <image source="orc1_run_sword_front.png" width="512" height="256"/>
+  <image source="orc1_run_sword.png" width="512" height="256"/>
   <tile id="1">
    <animation>
     <frame tileid="1" duration="150"/>
@@ -13271,7 +13271,7 @@
   </tile>
  </tileset>
  <tileset firstgid="13953" name="orc1_death_full" tilewidth="16" tileheight="16" tilecount="512" columns="32">
-  <image source="orc1_death_sword_front.png" width="512" height="256"/>
+  <image source="orc1_death_sword.png" width="512" height="256"/>
   <tile id="1">
    <animation>
     <frame tileid="1" duration="150"/>
@@ -13634,7 +13634,7 @@
   </tile>
  </tileset>
  <tileset firstgid="14465" name="orc1_hurt_full" tilewidth="16" tileheight="16" tilecount="384" columns="24">
-  <image source="orc1_hurt_sword_front.png" width="384" height="256"/>
+  <image source="orc1_hurt_sword.png" width="384" height="256"/>
   <tile id="1">
    <animation>
     <frame tileid="1" duration="150"/>
@@ -13897,7 +13897,7 @@
   </tile>
  </tileset>
  <tileset firstgid="14849" name="orc1_attack_full" tilewidth="16" tileheight="16" tilecount="512" columns="32">
-  <image source="orc1_attack_sword_front.png" width="512" height="256"/>
+  <image source="orc1_attack_sword.png" width="512" height="256"/>
   <tile id="1">
    <animation>
     <frame tileid="1" duration="150"/>
@@ -14523,8 +14523,8 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="15361" name="orc1_walk_attack_front _full" tilewidth="16" tileheight="16" tilecount="384" columns="24">
-  <image source="orc1_walk_attack_sword_front.png" width="384" height="256"/>
+ <tileset firstgid="15361" name="orc1_walk_attack_full" tilewidth="16" tileheight="16" tilecount="384" columns="24">
+  <image source="orc1_walk_attack_sword.png" width="384" height="256"/>
   <tile id="24">
    <animation>
     <frame tileid="24" duration="150"/>
@@ -14997,7 +14997,7 @@
   </tile>
  </tileset>
  <tileset firstgid="15745" name="orc1_walk_full" tilewidth="16" tileheight="16" tilecount="384" columns="24">
-  <image source="orc1_rwalk_sword_front.png" width="384" height="256"/>
+  <image source="orc1_rwalk_sword.png" width="384" height="256"/>
   <tile id="1">
    <animation>
     <frame tileid="1" duration="150"/>
@@ -15259,8 +15259,8 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="16129" name="orc1_run_attack_front_full" tilewidth="16" tileheight="16" tilecount="512" columns="32">
-  <image source="orc1_run_attack_sword_front.png" width="512" height="256"/>
+ <tileset firstgid="16129" name="orc1_run_attack_full" tilewidth="16" tileheight="16" tilecount="512" columns="32">
+  <image source="orc1_run_attack_sword.png" width="512" height="256"/>
   <tile id="1">
    <animation>
     <frame tileid="1" duration="150"/>
@@ -15887,7 +15887,7 @@
   </tile>
  </tileset>
  <tileset firstgid="16641" name="orc1_idle_full" tilewidth="16" tileheight="16" tilecount="256" columns="16">
-  <image source="orc1_idle_sword_front.png" width="256" height="256"/>
+  <image source="orc1_idle_sword.png" width="256" height="256"/>
   <tile id="1">
    <animation>
     <frame tileid="1" duration="150"/>
@@ -17876,7 +17876,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="19073" name="orc1_run_attack_front_full" tilewidth="16" tileheight="16" tilecount="512" columns="32">
+ <tileset firstgid="19073" name="orc1_run_attack_full" tilewidth="16" tileheight="16" tilecount="512" columns="32">
   <image source="orc1_run_attack_head.png" width="512" height="256"/>
   <tile id="1">
    <animation>
@@ -18766,7 +18766,7 @@
    </animation>
   </tile>
  </tileset>
- <tileset firstgid="19969" name="orc1_walk_attack_front _full" tilewidth="16" tileheight="16" tilecount="384" columns="24">
+ <tileset firstgid="19969" name="orc1_walk_attack_full" tilewidth="16" tileheight="16" tilecount="384" columns="24">
   <image source="orc1_walk_attack_head.png" width="384" height="256"/>
   <tile id="24">
    <animation>
@@ -20045,7 +20045,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="6" name="sword_front" width="16" height="32">
+ <layer id="6" name="sword" width="16" height="32">
   <data encoding="csv">
 0,16642,16643,0,0,16706,16707,0,0,16770,16771,0,0,16834,16835,0,
 0,16658,16659,0,0,16722,16723,0,0,16786,16787,0,0,16850,16851,0,

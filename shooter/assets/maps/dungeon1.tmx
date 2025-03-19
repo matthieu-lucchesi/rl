@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="32">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="50" height="50" tilewidth="16" tileheight="16" infinite="0" nextlayerid="9" nextobjectid="33">
  <tileset firstgid="1" source="../donjons/tileset_dungeon.tsx"/>
  <tileset firstgid="257" source="nature.tsx"/>
  <layer id="1" name="floor" width="50" height="50">
@@ -404,7 +404,7 @@
   <object id="23" name="enter_dungeon1_spawn" x="734" y="554">
    <point/>
   </object>
-  <object id="24" x="192" y="240" width="32" height="16"/>
+  <object id="24" type="collision" x="192" y="240" width="32" height="16"/>
   <object id="25" x="624" y="240" width="32" height="16"/>
   <object id="26" x="272" y="384" width="32" height="16"/>
   <object id="28" x="304" y="496" width="32" height="16"/>

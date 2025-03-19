@@ -69,6 +69,47 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "ennemies/Orc1.tmx": {
+            "scale": 1.128125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 128.08864265927974,
+                "y": 24.81994459833794
+            }
+        },
+        "ennemies/Orc1.tmx#orc1_attack_full": {
+            "scaleInDock": 1
+        },
+        "ennemies/Orc1.tmx#orc1_death_full": {
+            "scaleInDock": 1
+        },
+        "ennemies/Orc1.tmx#orc1_hurt_full": {
+            "scaleInDock": 1
+        },
+        "ennemies/Orc1.tmx#orc1_idle_full": {
+            "scaleInDock": 1
+        },
+        "ennemies/Orc1.tmx#orc1_run_attack_front_full": {
+            "scaleInDock": 1
+        },
+        "ennemies/Orc1.tmx#orc1_run_attack_full": {
+            "scaleInDock": 1
+        },
+        "ennemies/Orc1.tmx#orc1_run_full": {
+            "scaleInDock": 1
+        },
+        "ennemies/Orc1.tmx#orc1_walk_attack_front _full": {
+            "scaleInDock": 1
+        },
+        "ennemies/Orc1.tmx#orc1_walk_attack_full": {
+            "scaleInDock": 1
+        },
+        "ennemies/Orc1.tmx#orc1_walk_full": {
+            "scaleInDock": 1
+        },
+        "ennemies/Orc1.tmx#shadow": {
+            "scaleInDock": 1
+        },
         "houses/house.tsx": {
             "scaleInDock": 1,
             "scaleInEditor": 1
@@ -99,8 +140,8 @@
             "scale": 0.9298124999999999,
             "selectedLayer": 6,
             "viewCenter": {
-                "x": 399.54291859918,
-                "y": 399.5429185991799
+                "x": 399.5429185991799,
+                "y": 399.0051757746857
             }
         },
         "maps/fight_world.tmx": {
@@ -108,10 +149,10 @@
                 3
             ],
             "scale": 0.9298124999999999,
-            "selectedLayer": 3,
+            "selectedLayer": 6,
             "viewCenter": {
-                "x": 399.54291859918,
-                "y": 399.5429185991799
+                "x": 403.84486119513343,
+                "y": 504.40276937554614
             }
         },
         "maps/house.tsx": {
@@ -139,8 +180,8 @@
             "scale": 1.5,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 200.33333333333331,
-                "y": 199.66666666666666
+                "x": 200.33333333333334,
+                "y": 199.33333333333334
             }
         },
         "maps/nature.tsx": {
@@ -154,11 +195,11 @@
             "expandedObjectLayers": [
                 7
             ],
-            "scale": 1.5,
+            "scale": 1,
             "selectedLayer": 7,
             "viewCenter": {
-                "x": 403.66666666666663,
-                "y": 375.33333333333326
+                "x": 370.5,
+                "y": 169
             }
         },
         "maps/world.tsx": {
@@ -240,6 +281,7 @@
     "project": "shooter.tiled-project",
     "recentFiles": [
         "pnjs/boss.tsx",
+        "ennemies/Orc1.tmx",
         "player/player/Base_boy.tmx",
         "maps/world.tmx",
         "maps/house1.tmx",
@@ -249,8 +291,7 @@
         "C:/Users/lucch/Downloads/craftpix-net-870940-free-base-4-direction-male-character-pixel-art/Tiled_files/Base_boy.tmx",
         "maps/house.tsx",
         "donjons/tileset_dungeon.tsx",
-        "maps/dungeon.tmx",
-        "maps/nature.tsx"
+        "maps/dungeon.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
